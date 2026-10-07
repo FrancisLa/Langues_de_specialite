@@ -26,7 +26,6 @@ article/
 ├── article_imrad.docx
 ├── article_imrad.pdf
 ├── bibliographie.bib
-├── references_formatees.md
 ├── tableaux/
 │   ├── tableau_01_description_corpus.docx
 │   └── tableau_02_resultat_principal.docx
@@ -46,7 +45,6 @@ article/
 | `article_imrad.docx` | Version éditable de l’article | Oui |
 | `article_imrad.pdf` | Version finale destinée à la remise | Oui |
 | `bibliographie.bib` | Références bibliographiques au format BibTeX | Oui |
-| `references_formatees.md` | Bibliographie formatée pour la version finale | Oui |
 | `tableaux/` | Tableaux intégrés à l’article | Oui |
 | `figures/` | Figures intégrées à l’article | Oui |
 | `annexes/` | Documents complémentaires nécessaires à l’évaluation | Oui |
