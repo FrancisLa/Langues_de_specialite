@@ -78,6 +78,7 @@ La démarche est **itérative**. Les changements de question, de corpus, de cat�
 .
 ├── README.md
 ├── LICENSE
+├── LICENSE-DOCS.md
 ├── .gitignore
 │
 ├── journal/
@@ -120,14 +121,10 @@ La démarche est **itérative**. Les changements de question, de corpus, de cat�
 │   └── extraits/
 │
 ├── article/
-│   ├── article_imrad.md
-│   ├── article_imrad.pdf
-│   └── bibliographie.bib
-│
-└── docs/
-    ├── protocole.md
-    ├── schema_chaine_recherche.png
-    └── declaration_contributions.md
+    ├── article_imrad.md
+    ├── article_imrad.pdf
+    └── bibliographie.bib
+
 ```
 
 > Les dossiers non pertinents pour le projet peuvent être retirés ou renommés.  
