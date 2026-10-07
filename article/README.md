@@ -111,7 +111,7 @@ article/
 
 L’article suit une structure adaptée aux enquêtes empiriques : **Introduction, Méthodes, Résultats, Discussion**.
 
-Cette structure est particulièrement utile pour séparer la raison d’être d’une étude, la manière dont elle a été conduite, les observations produites et leur interprétation. L’IMRAD est courant pour les articles de recherche originale, mais il ne constitue pas le format obligatoire de tous les travaux en TAL ou en sciences du langage. [244]
+Cette structure est particulièrement utile pour séparer la raison d’être d’une étude, la manière dont elle a été conduite, les observations produites et leur interprétation. L’IMRAD est courant pour les articles de recherche originale, mais il ne constitue pas le format obligatoire de tous les travaux en TAL ou en sciences du langage.
 
 | Section | Question du lecteur | Contenu attendu |
 |---|---|---|
