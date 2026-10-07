@@ -1,6 +1,6 @@
 # [Titre provisoire du projet]
 
-> **Cours — Langues et discours de spécialité : concevoir et conduire une enquête**  
+> **Cours — Langues de spécialité**  
 > [Session] · UMLP · Enseignant : Francis Lareau  
 > Auteurs : [Nom, Prénom]  
 > Version évaluée : [`vX.Y`](../../releases/tag/vX.Y) · Commit : `[hash]`
