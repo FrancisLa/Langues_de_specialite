@@ -121,9 +121,13 @@ La démarche est **itérative**. Les changements de question, de corpus, de cat�
 │   └── extraits/
 │
 ├── article/
-    ├── article_imrad.md
-    ├── article_imrad.pdf
-    └── bibliographie.bib
+|   ├── article_imrad.md
+|   ├── article_imrad.pdf
+|   └── bibliographie.bib
+└── docs/
+    ├── README.md
+    └── syllabus/
+        └── syllabus_cours.pdf
 
 ```
 
