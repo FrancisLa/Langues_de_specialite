@@ -22,7 +22,6 @@ Il ne constitue pas un journal chronologique du projet, ni une copie du dépôt 
 ```text
 article/
 ├── README.md
-├── article_imrad.md
 ├── article_imrad.docx
 ├── article_imrad.pdf
 ├── bibliographie.bib
@@ -41,7 +40,6 @@ article/
 | Fichier ou dossier | Fonction | Versionné dans Git ? |
 |---|---|:---:|
 | `README.md` | Documentation du dossier | Oui |
-| `article_imrad.md` | Version source en Markdown, si utilisée | Oui |
 | `article_imrad.docx` | Version éditable de l’article | Oui |
 | `article_imrad.pdf` | Version finale destinée à la remise | Oui |
 | `bibliographie.bib` | Références bibliographiques au format BibTeX | Oui |
