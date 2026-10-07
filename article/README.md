@@ -659,7 +659,116 @@ les résultats et les formulations finales. Aucun résultat,
 référence ou citation n’a été retenu sans contrôle.
 ```
 
-Les auteurs demeurent responsables de l’ensemble du contenu soumis.
+De plus, le journal constitue le registre détaillé des usages d’IA, car il permet
+de consigner :
+
+- le moment où l’outil a été utilisé ;
+- la tâche concernée ;
+- les données ou documents transmis à l’outil ;
+- les instructions, requêtes ou paramètres significatifs ;
+- la sortie produite ;
+- les vérifications humaines effectuées ;
+- les erreurs, limites ou effets de cet usage sur la démarche ;
+- les conséquences éventuelles sur la question, le corpus, les catégories,
+  l’analyse ou l’interprétation.
+
+La documentation détaillée se trouve dans :
+
+```text
+journal/journal_de_bord.md
+```
+## Format recommandé dans le journal
+
+Créer une entrée distincte ou une sous-section lorsqu’un LLM ou un outil
+d’IA est utilisé de manière substantielle.
+
+```markdown
+## YYYY-MM-DD — Utilisation d’un outil d’IA pour [tâche]
+
+### Étape concernée
+[Ex. : préparation, annotation, analyse, rédaction.]
+
+### Outil ou modèle
+- Outil : [nom]
+- Modèle ou version : [nom/version, si connu]
+- Mode d’accès : [interface, API, bibliothèque locale]
+- Date d’utilisation : [YYYY-MM-DD]
+
+### Objectif
+[Décrire la tâche confiée à l’outil.]
+
+### Données ou informations transmises
+[Décrire précisément les contenus transmis.
+Ne jamais copier de secret ou de donnée sensible non autorisée.]
+
+### Instruction ou prompt
+[Conserver le prompt complet, un gabarit de prompt ou une description
+suffisamment précise de l’instruction.]
+
+### Sortie produite
+[Décrire le type de sortie : code, proposition de catégorie,
+annotation, résumé, tableau, etc.]
+
+### Vérification humaine
+[Décrire comment l’équipe a vérifié, corrigé, rejeté ou retenu la sortie.]
+
+### Décision finale
+[Expliquer ce qui a été intégré au projet et pourquoi.]
+
+### Conséquences méthodologiques
+[Indiquer les effets sur le corpus, les catégories, les méthodes,
+les résultats ou les limites.]
+
+### Traces liées
+- [Lien vers le code, protocole ou configuration]
+- [Lien vers le résultat concerné]
+- [Lien vers le commit pertinent]
+```
+
+---
+
+## Exemple : assistance au code
+
+```markdown
+## 2026-10-21 — Aide à la préparation d’un script d’extraction
+
+### Étape concernée
+Extraction des notes de bas de page.
+
+### Outil ou modèle
+- Outil : [nom de l’outil]
+- Mode d’accès : interface conversationnelle
+- Date d’utilisation : 2026-10-21
+
+### Objectif
+Obtenir une proposition de structure de script permettant d’extraire
+le texte principal et les notes de bas de page de documents HTML.
+
+### Données ou informations transmises
+Un exemple de structure HTML fictive et une description abstraite
+des balises recherchées. Aucun document sous licence, identifiant,
+mot de passe ou texte non autorisé n’a été transmis.
+
+### Instruction ou prompt
+Une demande décrivant les balises à extraire et le format de sortie
+souhaité.
+
+### Sortie produite
+Une proposition de script Python.
+
+### Vérification humaine
+Le script a été relu, adapté par l’équipe et testé sur cinq documents.
+Les sorties ont été comparées aux documents sources.
+
+### Décision finale
+Seule une partie de la structure proposée a été retenue. Les règles
+d’extraction finales sont documentées dans le protocole du projet.
+
+### Traces liées
+- `chaine/04_preparation/01_extraction/`
+- `configuration/config.example.yml`
+- [commit : hash]
+```
 
 ---
 
