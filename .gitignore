@@ -1,0 +1,124 @@
+# ============================================================
+# .gitignore — Languess et discours de spécialité
+# ============================================================
+
+# ------------------------------------------------------------
+# 1. Données non partageables ou volumineuses
+# ------------------------------------------------------------
+
+# Textes sources bruts téléchargés, moissonnés ou sous licence
+/donnees/sources/
+
+# Données temporaires ou intermédiaires reproductibles
+/donnees/intermediaires/
+
+# Corpus préparés si leur diffusion n'est pas autorisée
+/donnees/preparees/
+
+# Archives de corpus ou exports lourds
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# ------------------------------------------------------------
+# 2. Informations sensibles et accès privés
+# ------------------------------------------------------------
+
+# Variables d'environnement, identifiants, jetons d'accès
+.env
+.env.*
+!.env.example
+
+# Fichiers de configuration locaux
+/configuration/config.yml
+/configuration/config.yaml
+/configuration/config.json
+
+# Clés et certificats
+*.pem
+*.key
+*.p12
+*.pfx
+
+# ------------------------------------------------------------
+# 3. Fichiers Python
+# ------------------------------------------------------------
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environnements virtuels
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Tests et couverture de code
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ------------------------------------------------------------
+# 4. Fichiers R
+# ------------------------------------------------------------
+
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# Dossiers de travail temporaires
+.Rproj.user/
+.Rhistory
+.RData
+
+# ------------------------------------------------------------
+# 5. Systèmes et éditeurs
+# ------------------------------------------------------------
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux / fichiers temporaires
+*~
+*.swp
+*.swo
+*.tmp
+
+# VS Code : ignorer les réglages locaux,
+# mais conserver les configurations de projet utiles
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains / PyCharm
+.idea/
+
+# ------------------------------------------------------------
+# 6. Productions reproductibles ou provisoires
+# ------------------------------------------------------------
+
+# Figures provisoires ; conserver seulement les figures finales
+/resultats/figures/provisoires/
+
+# Tableaux temporaires ou exports de travail
+/resultats/tableaux/provisoires/
+
+# Journaux techniques produits automatiquement
+*.log
+
+# ------------------------------------------------------------
+# 7. Fichiers bureautiques temporaires
+# ------------------------------------------------------------
+
+~$*
+*.bak
+*.temp
