@@ -33,7 +33,7 @@ créés pour ce dépôt, y compris :
 - les présentations et diapositives originales ;
 - les exemples pédagogiques explicitement identifiés comme construits ;
 - les documents du dossier `docs/` ;
-- les gabarits originaux du dossier `gabarit_projet/`.
+- les gabarits originaux.
 
 Les scripts, code, fichiers de configuration et gabarits techniques sont
 couverts séparément par la licence MIT disponible dans le fichier
