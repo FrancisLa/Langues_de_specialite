@@ -748,7 +748,7 @@ journal/
 - [ ] Aucun texte protégé, renseignement personnel ou donnée non partageable n’est inclus sans autorisation.
 - [ ] Les règles institutionnelles et les consignes de remise sont respectées.
 
-## Références méthodologiques
+# Références méthodologiques
 
 - Mensh, B., & Kording, K. (2017). “Ten Simple Rules for Structuring Papers.” PLOS Computational Biology, 13(9), e1005619. https://doi.org/10.1371/journal.pcbi.1005619
 - Sollaci, L. B., & Pereira, M. G. (2004). The introduction, methods, results, and discussion (IMRAD) structure: A fifty-year survey. *Journal of the Medical Library Association, 92*(3), 364–367. https://www.proquest.com/scholarly-journals/introduction-methods-results-discussion-imrad/docview/203475373/se-2
