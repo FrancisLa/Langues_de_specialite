@@ -387,18 +387,47 @@ article/bibliographie.bib
 
 ## Licence et réutilisation
 
-### Code
+### Code et gabarits techniques
 
-[Ex. : MIT License / GPL-3.0 / à préciser]
+Sauf indication contraire, le code, les scripts, les fichiers de
+configuration et les gabarits techniques de ce dépôt sont distribués
+sous licence [MIT](LICENSE).
 
-### Données
+Vous pouvez les utiliser, modifier et redistribuer, à condition de
+conserver l’avis de droit d’auteur et le texte de la licence.
 
-[Préciser les droits et restrictions. Ne pas appliquer une licence aux données si vous n’en détenez pas les droits.]
+### Documents pédagogiques
 
-### Citation suggérée
+Les documents pédagogiques originaux — README, consignes, fiches,
+présentations et gabarits méthodologiques — sont distribués sous licence
+[CC BY 4.0](LICENSE-DOCS.md).
 
-```text
-[Nom(s)]. ([Année]). [Titre du projet].
-Dépôt du cours « Langues et discours de spécialité ».
-Version [X.Y]. [URL du dépôt si public].
-```
+### Données et contenus tiers
+
+Les corpus, données, articles, extraits, images, documents sous licence
+ou autres contenus provenant de tiers ne sont pas automatiquement
+couverts par les licences de ce dépôt. Leur utilisation et leur partage
+doivent respecter leurs conditions propres.
+
+### Dépôts des étudiants
+
+Ce dépôt fournit un gabarit. Chaque étudiant ou équipe qui crée son
+propre dépôt doit examiner et, au besoin, modifier sa licence selon :
+
+- la nature de son code ;
+- les conditions de réutilisation de ses données ;
+- les droits applicables aux documents de son corpus ;
+- les contributions des membres de l’équipe ;
+- les exigences de son établissement ou de ses sources de données.
+
+La licence MIT est une option suggérée pour le code original d’un projet
+étudiant lorsque les auteurs souhaitent permettre une réutilisation large
+avec attribution et sans garantie.
+
+La licence CC BY 4.0 peut être envisagée pour les documents originaux,
+guides ou productions pédagogiques, mais elle ne doit pas être appliquée
+à des données ou documents tiers sans autorisation.
+
+En cas de doute, conserver le dépôt privé, ne pas ajouter de licence
+publique aux données, et documenter les conditions d’accès dans
+`donnees/README.md`.
