@@ -2,8 +2,7 @@
 
 > **Cours — Langues de spécialité**  
 > [Session] · UMLP · Enseignant : Francis Lareau  
-> Auteur : [Nom, Prénom]  
-> Version évaluée : [`vX.Y`](../../releases/tag/vX.Y) · Commit : `[hash]`
+> Auteur (étudiant) : [Nom, Prénom]  
 
 ## Résumé du projet
 
