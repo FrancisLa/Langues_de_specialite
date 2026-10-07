@@ -431,3 +431,12 @@ guides ou productions pédagogiques, mais elle ne doit pas être appliquée
 En cas de doute, conserver le dépôt privé, ne pas ajouter de licence
 publique aux données, et documenter les conditions d’accès dans
 `donnees/README.md`.
+
+### Citation suggérée
+
+```text
+[Nom(s)]. ([Année]). [Titre du projet].
+Dépôt du cours « Langues et discours de spécialité ».
+Version [X.Y]. [URL du dépôt si public].
+```
+
