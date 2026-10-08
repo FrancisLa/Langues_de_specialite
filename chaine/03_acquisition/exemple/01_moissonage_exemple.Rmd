@@ -104,6 +104,9 @@ html_download_path <- paste0(download_path,'/HTML')
 # 5 Créer le dossier du chemin d'accès s'il n'existe pas ####
 if (!dir.exists(html_download_path)) {dir.create(html_download_path)}
 
+# 6 Noter un fichier log ####
+file_log <- file.path(download_path, "log.txt")
+
 ```
 
 ## 2.2 Moissonnage
@@ -217,6 +220,11 @@ for (volume_url in volume_urls[[length(volume_urls)-1]])
       rip(.,
           destfile = paste0(nrow(dataframe),".pdf"),
           path = pdf_download_path)
+    # 3.6 Ajouter une entrée au log
+    cat(
+          paste(Sys.time(), "- Scraping ",article_url,"\n"),
+          file = file_log,
+          append = TRUE)
   }
 }
 
