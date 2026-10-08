@@ -46,17 +46,18 @@ Notons que certaines opérations constitueront une suite de sous-opérations (pi
 
 ```{r 1.1 Librairies}
 
-# 1 Installer la librairie si elle ne l'est pas déjà ####
-if(!("polite" %in% rownames(installed.packages()))){install.packages('polite')}
+# 1 Installer remotes si nécessaire
+if (!requireNamespace("remotes", quietly = TRUE)) {install.packages("remotes")}
+ 
+# 2 Installer polite depuis GitHub si nécessaire
+if (!requireNamespace("polite", quietly = TRUE)) {remotes::install_github("dmi3kno/polite")}
 
-# 2 Importer la librairie ####
-library(polite)
-require(xml2)
-
-# 3 Installer la librairie si elle ne l'est pas déjà ####
+# 3 Installer la librairie si nécessaire
 if(!("pdftools" %in% rownames(installed.packages()))){install.packages('pdftools')}
 
-# 4 Importer la librairie ####
+# 4 Charger les librairies
+library(polite)
+library(xml2)
 library(pdftools)
 
 ```
