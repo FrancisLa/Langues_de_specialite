@@ -1,199 +1,385 @@
 ---
-title: "Scrapping"
+title: "Scraping"
 author: "Francis Lareau"
-date: "21/01/2020"
-output: html_document
-    number_sections: yes
+date: "25/09/2020"
+knit: (function(inputFile, encoding) {
+  output_dir <- "/cloud/project/0_Script_html";
+  if(!dir.exists(output_dir)) {dir.create(output_dir)};
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = output_dir) })
+output:
+  html_document:
+    number_sections: false
     toc: yes
+    toc_float: true
+    theme: united
+    highlight: zenburn
+editor_options:
+  chunk_output_type: console
 ---
 
-# 1 Plan de cours
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
 
-# 2 Préalables
+# 1 Introduction
 
-## 2.1 Librairies
+La collecte de données est le moment où l'on collige les informations nécessaires à la recherche. Le moissonnage (*scraping* ou *harvesting*) est un moyen parmi d'autres permettant cette collecte de données où l'on explore des sites web, via un script ou un programme, dans le but d'en extraire le contenu. Les pages web renfermant les contenus recherchés sont téléchargées formant ainsi un ensemble de données brutes qu'on peut éventuellement diviser en :   
 
-```{r 2.1.1}
-#install.packages("RSelenium")
-#install.packages("xlsx")
-library(RSelenium)
-library(binman)
-library(stringr)
-library(xlsx)
-library(dplyr)
+1) données (les textes étudiés) ;   
+2) métadonnées (les informations utiles à propos des textes étudiés) ;   
+3) informations non retenues (les informations inutiles par rapport aux objectifs de recherche).
+
+Plusieurs outils sont disponibles pour effectuer le moissonnage du web. Dans le cadre de cette introduction, nous utilisons la librairie **polite** qui permet un moissonnage responsable du web, c.-à-d. en suivant les principes de :   
+
+1) se présenter à l'hôte ;
+2) demander la permission ;
+3) opérer lentement ;
+4) sans redite (demander une seule fois). 
+
+Plus précisément, notre collecte de données impliquera :   
+
+1) l'interrogation de sites internet pour noter des liens URL (*Uniform Resource Locator*) pouvant mener à des pages web renfermant les informations recherchées, puis le téléchargement de ces pages web ;
+2) l'introduction dans la structure de données des documents HTML téléchargés à l'aide de la librairie **xml2** (incluse dans **polite**) ;
+3) l'introduction dans la structure de données des documents PDF téléchargés à l'aide de la librairie **pdftools**. 
+
+Notons que certaines opérations constitueront une suite de sous-opérations (pipeline). Nous emploierons alors le symbole **%>%** défini par la librairie **magrittr** (incluse dans **polite**) afin d'articuler ces sous-opérations. Enfin, procédons à l'importation des librairies nécessaires.
+
+```{r 1.1 Librairies}
+
+# 1 Installer la librairie si elle ne l'est pas déjà ####
+if(!("polite" %in% rownames(installed.packages()))){install.packages('polite')}
+
+# 2 Importer la librairie ####
+library(polite)
+require(xml2)
+
+# 3 Installer la librairie si elle ne l'est pas déjà ####
+if(!("pdftools" %in% rownames(installed.packages()))){install.packages('pdftools')}
+
+# 4 Importer la librairie ####
+library(pdftools)
 
 ```
 
+# 2 Collecte des données brutes
 
-chromeversion:
+## 2.1 Structuration des données brutes
 
-Create a string path to the chrome application folder where there is a folder that contains the version number. 
-String extract the version number on that folder and replace all dots with a \\. (you need another backslash to escape the backslash) to use it in the next str_extract.
+La fonction de base **data.frame()** fournit une structure de données sous forme de tabloïde. Une manière de structurer les contenus extraits du web est d'insérer une nouvelle ligne dans le tabloïde à mesure que de nouveaux documents sont moissonnés, puis de classer les informations relatives à ces documents dans des catégories préalablement identifiées qui correspondront à des colonnes distinctes. 
 
-chromedriver:
+Le corpus sélectionné pour notre démonstration est la revue en ligne *Argumentation et Analyse du Discours* de sorte que nos données brutes seront constituées des articles de ce journal. Une page web au format HTML correspondant à chaque article sera téléchargée et l'adresse de cette page sera inscrite dans la colonne **HTML_URL**. Aussi, une version PDF de l'article sera téléchargée et l'adresse correspondant à chaque PDF sera inscrite à la colonne **PDF_URL**. Ultérieurement, les documents HTML et PDF seront incorporés à notre structure de données respectivement aux colonnes **HTML** ou **PDF**.
 
-String extract all the matches of the object chromeversion added with another digit paste0(chromeversions, '\\d+') from the string resulting from list_versions("chromedriver) (this is a binman function), convert to numeric versions and get the lowest version min() or alternatively the highest using max().
+```{r 2.1.1 Structure de données et de métadonnées}
 
-(Danny-dK, source:https://github.com/ropensci/RSelenium/issues/198)
-
-```{r 2.1.2}
-
-chromeversion <- toString(dir(path = 'C:/Program Files (x86)/Google/Chrome/Application/')) %>% 
-                 str_extract(., '^\\d+\\.\\d+\\.\\d+\\.') %>% 
-                 str_replace_all(., '\\.', '\\\\.')  
-
-chromedriver <-  str_extract_all(toString(list_versions("chromedriver")), paste0(chromeversion, '\\d+'), simplify = TRUE) %>% 
-                 as.numeric_version(.) %>% 
-                 min(.)
+# Créer un dataframe vide ####
+dataframe <- data.frame(HTML=character(),
+                        HTML_URL=character(),
+                        PDF=character(),
+                        PDF_URL=character(),
+                        stringsAsFactors=FALSE)
 
 ```
 
-```{r dataframe, echo=FALSE}
-df <- data.frame(Journal=character(),
-                 Date=character(),
-                 Volume=character(),
-                 Vol_title=character(),
-                 Vol_dir=character(),
-                 Vol_sect=character(),
-                 Art_ID=character(),
-                 Art_author=character(),
-                 Art_title=character(),
-                 Art_resume=character(),
-                 Art_abstract=character(),
-                 Art_motsclefs=character(),
-                 Art_keywords=character(),
-                 Article=character(),
-                 Art_notes=character(),
-                 Art_refs=character(),
-                 Art_lang=character(),
-                 Art_doi=character(),
-                 Art_type=character(),
-                 XML=character(),
-                 XML_URL=character(),
-                 PDF=character(),
-                 PDF_URL=character(),
-                 Time=character(),
-                 stringsAsFactors=FALSE)
+Avant de procéder au moissonnage, spécifions un endroit **html_download_path** où seront téléchargés les articles au format HTML ainsi qu'un endroit **pdf_download_path** où seront téléchargés les articles au format PDF. 
+
+```{r 2.1.2 Endroit pour le téléchargement}
+
+# 1 Noter le chemin d'accès au dossier des articles en format PDF ####
+pdf_download_path <- paste0(getwd(),'/1_PDF')
+
+# 2 Créer le dossier du chemin d'accès s'il n'existe pas ####
+if (!dir.exists(pdf_download_path)) {dir.create(pdf_download_path)}
+
+# 3 Noter le chemin d'accès au dossier des articles en format HTML ####
+html_download_path <- paste0(getwd(),'/1_HTML')
+
+# 4 Créer le dossier du chemin d'accès s'il n'existe pas ####
+if (!dir.exists(html_download_path)) {dir.create(html_download_path)}
 
 ```
 
-## 2.2 Ouvrir le navigateur distant
+## 2.2 Moissonnage
 
+Préalablement à l'élaboration d'une stratégie de moissonnage, on peut visualiser les opérations que ferait manuellement le chercheur pour collecter ses données en identifiant les formes opérationnelles répétitives pouvant faire l'objet de boucles récursives. Par exemple, la revue *Argumentation et Analyse du Discours* possède une page web principale répertoriant les pages web de tous les volumes, lesquelles donnent accès aux pages web des articles de chaque volume. 
 
-```{r 2.2.1}
+La page web principale constituera notre point de départ (**https://journals.openedition.org/aad/166**) puisque, à partir de celle-ci, il est possible de :  
 
-#cprof <- getChromeProfile(dataDir = "C:/Users/franc/AppData/Local/Google/Chrome", profileDir = "Profile 2")
-download_path = file.path(getwd(),'Downloads')
-dir.create(download_path, recursive = TRUE)
+1) noter l'adresse URL de tous les volumes, puis récursivement accéder aux pages web de ces volumes ;   
+2) noter l'adresse URL des articles de chaque volume, inscrire cette adresse à la colonne **HTML_URL**,   
+puis récursivement accéder et télécharger la page web de ces articles ;   
+3) noter l'adresse URL de l'article en format PDF, inscrire cette adresse à la colonne **PDF_URL**, puis télécharger le PDF.
 
-eCaps <- list(
-  chromeOptions = 
-    list(args = c('--no-sandbox', '--disable-gpu', '--start-maximized','--disable-popup-blocking','--disable-extensions'),
-         prefs = list(
-           "profile.default_content_settings.popups" = 0L,
-           "profile.default_content_setting_values.automatic_downloads" = 1L,
-           "download.prompt_for_download" = FALSE,
-           "download.directory_upgrade" = TRUE,
-           "safebrowsing.enabled" = TRUE,
-           "safebrowsing.disable_download_protection" = TRUE,
-           "download.default_directory" = str_replace_all(download_path, '/', '\\\\')
-           )
-         )
-  )
+Notons que toutes les pages web de la revue *Argumentation et Analyse du Discours* débutent par **https://journals.openedition.org/aad/** de sorte que cette partie générale est implicite lorsqu'on extrait un lien URL de cette revue. Cette information est notée dans **main_url** afin de compléter ultérieurement les liens URL (partiels) qui seront extraits. Par exemple, la fonction **paste0()** est utilisée ci-dessous pour formuler une adresse URL complète à partir de **main_url** (la partie générale) et de **166** (la partie particulière). Enfin, la fonction **bow()**, issue de la librairie **polite**, permet d'ouvrir une **session** que nous utiliserons pour gérer poliment nos transactions avec l'hôte **https://journals.openedition.org**.
 
-driver <- rsDriver(browser = "chrome", port = 4567L, geckover = NULL, 
-                   chromever =  toString(chromedriver), iedrver = NULL, 
-                   phantomver = NULL, verbose = FALSE, extraCapabilities = eCaps)
+```{r 2.2.1 Préparation}
 
-remDr <- driver$client
+# 1 Noter la partie générale des adresses URL ####
+main_url <- "https://journals.openedition.org/aad/"
+
+# 2 Coller la partie générale à celle particulière de l'adresse de départ ####
+starting_url <- paste0(main_url,"166")
+
+# 3 Ouvrir une session de navigation avec l'hôte ####
+session <- bow("https://journals.openedition.org",
+              # 3.1 Se présenter ####
+              user_agent = "UQAM's R Webscraping Tutorial francislareau@hotmail.com",
+              # 3.2 Définir un temps d'attente entre les requêtes ####
+              delay = 1) 
 
 ```
 
+Dans un premier temps, on lie la page web de départ à partir de l'objet **session**, puis on extrait les attributs dans lesquels se trouvent l'adresse URL des volumes. Ensuite, on extrait le texte de l'attribut pour, enfin, coller ce texte (la partie particulière) à la partie générale des adresses URL. Spécifions que ces opérations peuvent former des suites d'opérations (pipeline) et, le cas échéant, sont séparées par le symbole **%>%**.
 
-```{r cars}
+Dans le script ci-dessous, l'opération de :   
 
-remDr$navigate("https://journals.openedition.org/aad/2969")
-Sys.sleep(2)
-next_issue = TRUE
+1) naviguer d'une page web vers une autre s'effectue via la fonction **nod()** (issue de **polite**)  
+2) lire une page web s'effectue via la fonction **scrape()** (issue de **polite**)
+2) isoler l'attribut dans la page web s'effectue via la fonction **xml_find_all()** (issue de **xml2**)  
+3) extraire le texte s'effectue via la fonction **xml_text()** (issue de **xml2**) 
 
-while (next_issue) {
-  current_issue = unlist(remDr$getCurrentUrl())
-  vol_title = unlist(remDr$findElement('xpath','.//span[@class="title"]')$getElementText())
-  vol_dir = unlist(remDr$findElement('xpath','.//div[@id="publiDirector"]')$getElementText())
-  articles_links = remDr$findElements('xpath', '//div[@class="title"]/a') %>%
-  sapply(., function(article_link){article_link$getElementAttribute("href")})
-  #articles_links = sapply(articles_links, function(article_link){article_link$getElementAttribute("href")})
-  for (article_link in articles_links) {
-    article_link = unlist(article_link)
-    remDr$navigate(article_link)
-    Sys.sleep(2)
-    pdf_link = unlist(remDr$findElement('xpath','.//a[@id="wDownload"]')$getElementAttribute("href"))
-    row_id=nrow(df)+1
-    df[row_id,] = ''
-    df[row_id,'Vol_title'] = vol_title
-    df[row_id,'Vol_dir'] = vol_dir
-    df[row_id,'XML'] = unlist(remDr$getPageSource())
-    df[row_id,'XML_URL'] = article_link
-    df[row_id,'PDF_URL'] = pdf_link
-    df[row_id,'Time'] = as.character(Sys.time())
-    # remDr$navigate(pdf_link)
-    # Sys.sleep(10)
-    # tmpshot = fileSnapshot(download_path)
-    # latest_file = rownames(tmpshot$info[which.max(tmpshot$info$mtime),]) %>%
-    # file.path(download_path,.)
-    # new_name = file.path(download_path,paste(row_id,sep='','.pdf'))
-    # file.rename(latest_file,new_name)
+```{r 2.2.2 Moissonnage des volumes}
+
+# Noter l'adresse URL de tous les volumes ####
+volume_urls <-
+  # 1 Naviguer vers la page de départ ####
+  nod(session, starting_url) %>%
+  # 2 Lire la page web de départ ####
+  scrape(.) %>% 
+  # 3 Extraire les attributs où se trouvent les URL ####
+  xml_find_all(., xpath = '//*[@id="main"]/ul/li/a/@href') %>% 
+  # xml_find_all(., '//ul[@class="collection summary withcover"]/li/a/@href') %>% #variante ####
+  # 4 Extraire le texte de la partie particulière des URL ####
+  xml_text(.) %>%
+  # 5 Coller la partie générale à celle particulière des URL ####
+  paste0(main_url,.)
+
+```
+
+Dans un deuxième temps, on extrait l'adresse URL des articles de chaque volume, laquelle on notera dans les cellules de la colonne **HTML_URL**. Ensuite, on navigue vers chaque page web correspondant aux articles pour extraire l'adresse URL des PDF,  laquelle on notera dans les cellules de la colonne **PDF_URL**. Enfin, la page web HTML et le PDF sont téléchargés via la fonction **rip()** (issue de **polite**), lesquels sont nommés en fonction du numéro de ligne où on est rendu dans la structure de données.
+
+```{r 2.2.3 Moissonnage des articles}
+
+
+# Boucle pour traiter chaque URL des volumes ####
+# Note: on ne traite que le premier volume pour sauver du temps ####
+for (volume_url in volume_urls[[length(volume_urls)]]) 
+{ 
+  # 1 Naviguer vers la page du volume ####
+  volume_page <- nod(session, volume_url)
+  # 2 Noter l'adresse URL de tous les articles ####
+  article_urls <- 
+    # 2.1 Lire la page web du volume ####
+    scrape(volume_page) %>%
+    # 2.2 Extraire les attributs où se trouvent les URL d'articles ####
+    # xml_find_all(.,xpath='//*[@id="main"]/ul/li/ul/li/div/a/@href') %>% #### # variante non fonctionnelle ####
+    xml_find_all(., '//div[@class="title"]/a/@href') %>% 
+    # 2.3 Extraire le texte de la partie particulière des URL ####
+    xml_text(.) %>%
+    # 2.4 Coller la partie générale à celle particulière des URL ####
+    paste0(main_url,.)
+  # 3 Boucle pour traiter chaque URL des articles ####
+  for (article_url in article_urls) 
+  {
+    # 3.1 Naviguer vers la page web de l'article ####
+    article_page <- nod(session, article_url)
+    # 3.2 Noter l'adresse URL du PDF ####
+    pdf_url <-
+      scrape(article_page) %>%
+      xml_find_all(., '//*[@id="wDownload"]/@href') %>%
+      xml_text(.) %>% 
+      paste0(main_url,.)
+    # 3.3 Créer un nouveau dataframe (ancienne + nouvelle ligne) ####
+    dataframe <- 
+      rbind(dataframe,
+            data.frame(HTML=NA,
+                       # 3.3.1 Inscrire URL de l'article HTML ####
+                       HTML_URL=article_url,
+                       PDF=NA,
+                       # 3.3.2 Inscrire URL de l'article PDF ####
+                       PDF_URL=pdf_url,
+                       stringsAsFactors=FALSE)) 
+    # 3.4 Télécharger l'article en format HTML ####
+    rip(article_page, 
+        # 3.4.1 Déterminer le nom du fichier ####
+        destfile = paste0(nrow(dataframe),".html"), 
+        # 3.4.2 Déterminer le chemin du dossier ####
+        path = html_download_path)
+    # 3.5 Télécharger l'article en format PDF ####
+    nod(article_page, pdf_url) %>%
+      rip(.,
+          destfile = paste0(nrow(dataframe),".pdf"),
+          path = pdf_download_path)
   }
-  remDr$navigate(current_issue)
-  Sys.sleep(2)
-  next_issue = tryCatch(
-    expr = {
-      next_issue_link = unlist(remDr$findElement('xpath','.//a[@class="goNext"]')$getElementAttribute("href"))
-      remDr$navigate(next_issue_link)
-      TRUE
-    },
-    error = function(e){return(FALSE)}
-    )
-  }
-  
+}
 
 ```
 
-## Fermer le navigateur distant
+# 3 Importation des documents HTML
 
-```{r cars}
-#remDr$close()
-driver$server$stop() 
-rm(remDr)
-gc()
-```
+L'introduction des documents HTML dans la structure de données implique l'importation et la conversion de ces documents en chaines de caractères que nous ferons respectivement à l'aide des fonctions **read_html()** et **as.character()**.
 
-```{r pressure, echo=FALSE}
+```{r 3.1 Importation des documents HTML}
 
-write.xlsx2(df, "dataframe_scrapping.xlsx", sheetName = "Sheet1",
-  col.names = TRUE, row.names = TRUE, append = FALSE)
-
-save(
-  df, # Les variables à sauvegarder
-  file = "dataframe_scrapping.RData" # On spécifie le nom du fichier dans le paramètre "file"
-)
-
-```
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-
+# Inscrire l'article brut à la colonne 'HTML' ####
+dataframe$HTML <- 
+  # 1 Énumération des numéros de ligne du dataframe ####
+  1:nrow(dataframe) %>%
+  # 2 Construire le chemin d'accès de l'article ####
+  paste0(getwd(),'/1_HTML/',.,'.html') %>%
+  # 3 Lire/décoder l'article en format HTML ####
+  # read_html(.) # ne permet pas de lire plusieurs fichiers #
+  lapply(., function(x) read_html(x)) %>%
+  # 4 Transformer l'article en chaine de caractères ####
+  # as.character(.) # ne permet pas de décoder plusieurs objets xml2 #
+  sapply(., function(x) as.character(x))
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Note : la fonction **lapply()** permet d'appliquer une même fonction sur tous les éléments d'une liste (ou vecteur) en s'assurant de produire à la sortie une liste de résultats (de même dimension). Similairement, **sapply()** permet d'appliquer une même fonction sur tous les éléments d'une liste (ou vecteur) en s'assurant de produire un vecteur de résultats. Il est d'usage de produire un vecteur lorsque tous les éléments sont du même type.
 
+# 4 Importation des documents PDF
+
+L'introduction des documents PDF dans la structure de données implique l'importation et la conversion de ces documents en chaines de caractères que nous ferons à l'aide de la librairie **pdftools**. La fonction qui nous intéresse est **pdf_text()**, laquelle extrait le contenu textuel du document PDF et le convertit sous forme de vecteur où chaque élément est une chaine de caractères correspondant à une page du PDF. Nous utiliserons la fonction **paste()** afin de joindre ces éléments (pages) en une seule chaine de caractères correspondant ici à un article, mais en introduisant entre chacune des pages un indicateur de changement de page incorporant le numéro de la page (**\<page_n>**). 
+
+1) Lorsqu'utilisée sur deux vecteurs de même longueur, la fonction **paste()** colle un à un les éléments d'un vecteur avec ceux de l'autre en introduisant entre eux des caractères définis par l'argument **sep**; 
+2) puis, les éléments résultants sont collés les uns à la suite des autres en insérant entre eux des caractères définis par l'argument **collapse**;
+3) pour, finalement, ne former qu'une seule chaine de caractères. 
+
+Dans l'exemple suivant, **paste()** assemble chaque page du PDF avec son numéro de page en insérant entre eux les caractères **\\n<page_**, puis colle ces éléments résultants en introduisant entre eux les caractères **>\\n**.
+
+```{r 4.1 Importation des documents PDF}
+
+# Inscrire l'article à la colonne 'PDF'####
+dataframe$PDF <-
+  # 1 Énumération des numéros de ligne du dataframe ####
+  1:nrow(dataframe) %>%
+  # 2 Construire le chemin d'accès de l'article ####
+  paste0(getwd(),'/1_PDF/',.,'.pdf') %>%
+  # 3 Lire/décoder l'article en format PDF ####
+  lapply(., function(x) pdf_text(x)) %>%
+  # 4 Transformer l'article en une seule chaine de caractères ####
+  lapply(., function(x) paste(x,1:length(x),sep='\n<page_',collapse='>\n')) %>%
+  # 5 Ajouter les caractères manquants à la fin de l'article ####
+  sapply(., function(x) paste0(x,'>\n'))
+
+```
+
+# 5 Sauvegarde de la structure de données
+
+La fonction **saveRDS()** sauvegarde un seul objet en format RDS où l'information est compressée (contrairement au format RDATA). Le format RDS permet une sauvegarde intégrale de la structure de données (contrairement au format CSV ou XLS).
+
+```{r 5.1 Sauvegarde de la structure de données}
+
+# Sauvegarder le dataframe en format RDS ####
+saveRDS(dataframe, "0_Data/1_scraping_dataframe.rds")
+
+```
+
+# 6 Exercices
+
+L'objectif pour la série d'exercices est de moissonner la *Revue d'Anthropologie des Connaissances* disponible en ligne chez OpenEdition (https://journals.openedition.org/rac/263 ). Pour ce faire, nous devons identifier des adresses URL à l'aide de formules XPATH. Notons que ces adresses ou hyperliens correspondent généralement à des éléments dont l'attribut **href** spécifie l'adresse URL. Directement dans le navigateur, on peut inspecter un hyperlien en cliquant avec le bouton de droite de la souris sur l'élément qui nous intéresse (puis cliquer sur *Inspecter*).
+
+## 6.1 Le moissonnage en pièces détachées
+
+Débutons en ouvrant une session avec la fonction **bow()**. Exécutez le code suivant après avoir déterminé la partie générale et la partie particulière de la page de départ :
+
+```{r 6.1.1 Préparation}
+
+main_url <- "…" # Veuillez remplacer … par la partie générale de l'URL ####
+
+starting_url <- paste0(main_url,"…") # Veuillez remplacer … par la partie particulière de l'URL ####
+
+session <- bow("https://journals.openedition.org",
+               user_agent = "UQAM's R Webscraping Tutorial",
+               delay = 1) 
+
+```
+
+Nous allons extraire l'adresse URL de tous les numéros dans la page web de départ contenant ces informations. Veuillez compléter le script suivant en inscrivant la formule de l'argument **xpath** de la fonction **xml_find_all()**.
+
+```{r 6.1.2 URL des numéros}
+
+volume_urls <-
+  nod(session, starting_url) %>%
+  scrape(.) %>%
+  xml_find_all(., '…') %>% # Veuillez remplacer … par la formule xpath ####
+  xml_text(.) %>%
+  paste0(main_url,.)
+
+```
+
+Nous allons extraire l'adresse URL de tous les articles de l'un des volumes précédemment identifiés (https://journals.openedition.org/rac/2162 ). Veuillez compléter le script suivant en inscrivant la formule de l'argument **xpath** de la fonction **xml_find_all()**.
+
+```{r 6.1.3 URL des articles}
+
+volume_url <- "https://journals.openedition.org/rac/2162"
+
+volume_page <- nod(session, volume_url)
+
+article_urls <-
+  scrape(volume_page) %>%
+  xml_find_all(., xpath='…') %>% # Veuillez remplacer … par la formule xpath ####
+  xml_text(.) %>% 
+  paste0(main_url,.)
+
+```
+
+Nous allons télécharger la page web d'un des articles avec la fonction **rip()**. Veuillez compléter le script suivant de manière à enregistrer la page de l'article dans un fichier nommé **1_scraping_exercice.html** et situé dans le répertoire de travail.
+
+```{r 6.1.4 Page web d\'un article en format HTML}
+
+article_url <- article_urls[1]
+
+article_page <- nod(volume_page, article_url)
+
+rip() # Veuillez compléter le code ####
+
+```
+
+## 6.2 Le moissonnage d'un volume de la *Revue d'Anthropologie des Connaissances*
+
+En vous inspirant des étapes précédentes, inscrivez l'adresse URL de tous les articles d'un seul volume du journal dans des cellules distinctes de la structure de données **df** et téléchargez les pages web de ces articles. Veuillez compléter la partie du code permettant de produire les objets **articles_url**, **df[row_id,'HTML_URL']** et les documents **html** qui devront porter le nom de la ligne correspondante dans la structure de données et se trouver dans un répertoire nommé **1_HTML_exercice**.
+
+```{r 6.2.1 Moissonnage}
+
+df <- 
+  data.frame(HTML=character(),
+             HTML_URL=character(),
+             stringsAsFactors=FALSE)
+
+html_download_path <- paste0(getwd(),'/1_HTML_exercice')
+
+if (!dir.exists(html_download_path)) {dir.create(html_download_path)}
+
+article_urls <- 
+  scrape(volume_page) %>%
+  xml_find_all(., xpath='…') %>% # Veuillez remplacer … par la formule xpath ####
+  xml_text(.) %>%
+  paste0(main_url,.)
+
+for (article_url in article_urls) 
+{
+  article_page <- nod(volume_page, article_url)
+  df <- rbind() # Veuillez compléter le code ####
+  rip() # Veuillez compléter le code ####
+}
+
+```
+
+En vous inspirant du script à la section [3 Importation des documents HTML], veuillez importer les documents HTML précédemment téléchargés dans la structure de données. Plus précisément, veuillez inscrire les documents HTML décodés en chaines de caractères à la colonne **HTML** de la structure de données **df**.
+
+```{r 6.2.2 Importation des documents HTML}
+
+# Veuillez inscrire le code ####
+
+```
+
+## 6.3 Sauvegarde de la structure de données
+
+Veuillez enregistrer la structure de données résultante **df** dans un fichier RDS portant le nom **1_scraping_dataframe_exercice.rds**.
+
+```{r 6.3.1 Sauvegarde}
+
+# Veuillez inscrire le code  ####
+
+```
