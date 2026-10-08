@@ -89,22 +89,26 @@ download_path <- paste0(getwd(),
 "/chaine/03_acquisition/exemple/donnee_brute"
 )
 
-# 1 Créer le dossier de données brutes s'il n'existe pas ####
-if (!dir.exists(download_path) {dir.create(paste0(getwd(),download_path))}
+# 1 Noter le chemin d'accès au dossier des données brutes ####
+download_path <- paste0(getwd(),
+  "/chaine/03_acquisition/exemple/donnee_brute")
 
-# 2 Noter le chemin d'accès au dossier des articles en format PDF ####
+# 2 Créer le dossier de données brutes s'il n'existe pas ####
+if (!dir.exists(download_path)) {dir.create(paste0(getwd(),download_path))}
+
+# 3 Noter le chemin d'accès au dossier des articles en format PDF ####
 pdf_download_path <- paste0(download_path,'/PDF')
 
-# 3 Créer le dossier du chemin d'accès s'il n'existe pas ####
+# 4 Créer le dossier du chemin d'accès s'il n'existe pas ####
 if (!dir.exists(pdf_download_path)) {dir.create(pdf_download_path)}
 
-# 4 Noter le chemin d'accès au dossier des articles en format HTML ####
+# 5 Noter le chemin d'accès au dossier des articles en format HTML ####
 html_download_path <- paste0(download_path,'/HTML')
 
-# 5 Créer le dossier du chemin d'accès s'il n'existe pas ####
+# 6 Créer le dossier du chemin d'accès s'il n'existe pas ####
 if (!dir.exists(html_download_path)) {dir.create(html_download_path)}
 
-# 6 Noter un fichier log ####
+# 7 Noter un fichier log ####
 file_log <- file.path(download_path, "log.txt")
 
 ```
