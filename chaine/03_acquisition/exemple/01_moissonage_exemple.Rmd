@@ -68,7 +68,7 @@ library(pdftools)
 
 La fonction de base **data.frame()** fournit une structure de données sous forme de tabloïde. Une manière de structurer les contenus extraits du web consiste à insérer une nouvelle ligne dans le tabloïde à mesure que de nouveaux documents sont moissonnés, puis à classer les informations relatives à ces documents dans des catégories préalablement identifiées, qui correspondront à des colonnes distinctes. 
 
-Le corpus sélectionné pour notre démonstration est la revue en ligne *Argumentation et Analyse du Discours*, de sorte que nos données brutes seront constituées des articles de cette revue. Une page web au format HTML correspondant à chaque article sera téléchargée et l'adresse de cette page sera inscrite dans la colonne **HTML_URL**. Aussi, une version PDF de l'article sera téléchargée et l'adresse correspondant à chaque PDF sera inscrite à la colonne **PDF_URL**. Ultérieurement, les documents HTML et PDF seront intégrés à notre structure de données, respectivement dans les colonnes **HTML** et **PDF**.
+Le corpus sélectionné pour notre démonstration est la revue en ligne *Argumentation et Analyse du Discours*, de sorte que nos données brutes seront constituées des articles de cette revue. Une page web au format HTML correspondant à chaque article sera téléchargée et l'adresse de cette page sera inscrite dans la colonne **HTML_URL**. De plus, une version PDF de l'article sera téléchargée et l'adresse correspondante à chaque PDF sera inscrite dans la colonne **PDF_URL**. Ultérieurement, les documents HTML et PDF seront intégrés à notre structure de données, respectivement dans les colonnes **HTML** et **PDF**.
 
 ```{r 2.1.1 Structure de données et de métadonnées}
 
@@ -132,7 +132,7 @@ session <- bow("https://journals.openedition.org",
 
 ```
 
-Dans un premier temps, on associe la page web de départ à l'objet **session**, puis on extrait les attributs contenant les URL des volumes. Ensuite, on extrait le texte de l'attribut pour, enfin, coller ce texte (la partie particulière) à la partie générale des adresses URL. Précisons que ces opérations peuvent former des suites d'opérations (pipeline) et, le cas échéant, sont séparées par le symbole **%>%**.
+Dans un premier temps, on associe la page web de départ à l'objet **session**, puis on extrait les attributs contenant les URL des volumes. Ensuite, on extrait le texte de l'attribut, puis on colle ce texte (la partie spécifique) dans la partie générale de l'URL. Précisons que ces opérations peuvent former des suites d'opérations (pipeline) et, le cas échéant, sont séparées par le symbole **%>%**.
 
 Dans le script ci-dessous, l'opération de :   
 
@@ -165,8 +165,8 @@ Dans un deuxième temps, on extrait l'URL des articles de chaque volume et on la
 
 
 # Boucle pour traiter chaque URL des volumes ####
-# Note: on ne traite que le premier volume pour sauver du temps ####
-for (volume_url in volume_urls[[length(volume_urls)]]) 
+# Note: on ne traite que le second volume pour sauver du temps ####
+for (volume_url in volume_urls[[length(volume_urls)-1]]) 
 { 
   # 1 Naviguer vers la page du volume ####
   volume_page <- nod(session, volume_url)
