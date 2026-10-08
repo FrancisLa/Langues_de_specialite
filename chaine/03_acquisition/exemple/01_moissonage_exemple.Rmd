@@ -86,7 +86,7 @@ Avant de procéder au moissonnage, spécifions un répertoire **html_download_pa
 ```{r 2.1.2 Endroit pour le téléchargement}
 
 # 1 Créer le dossier de données brutes s'il n'existe pas ####
-if (!dir.exists(paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute'))) {dir.create(pdf_download_path)}
+if (!dir.exists(paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute'))) {dir.create(paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute'))}
 
 # 2 Noter le chemin d'accès au dossier des articles en format PDF ####
 pdf_download_path <- paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute/PDF')
@@ -111,7 +111,7 @@ La page web principale constituera notre point de départ (**https://journals.op
 1) noter l'adresse URL de tous les volumes, puis récursivement accéder aux pages web de ces volumes ;   
 2) noter l'adresse URL des articles de chaque volume, inscrire cette adresse à la colonne **HTML_URL**,   
 puis récursivement accéder et télécharger la page web de ces articles ;   
-3) noter l'adresse URL de l'article en format PDF, inscrire cette adresse à la colonne **PDF_URL**, puis télécharger le PDF.
+3) noter l'URL de l'article au format PDF, l'inscrire dans la colonne **PDF_URL**, puis télécharger le PDF.
 
 Notons que toutes les pages web de la revue *Argumentation et Analyse du Discours* commencent par **https://journals.openedition.org/aad/**, de sorte que cette partie commune est implicite lorsqu'on extrait une URL de cette revue. Cette information est notée dans **main_url** afin de compléter ultérieurement les URL partielles qui seront extraites. Par exemple, la fonction **paste0()** est utilisée ci-dessous pour formuler une adresse URL complète à partir de **main_url** (la partie générale) et de **166** (la partie particulière). Enfin, la fonction **bow()**, issue de la librairie **polite**, permet d'ouvrir une **session** que nous utiliserons pour gérer poliment nos transactions avec l'hôte **https://journals.openedition.org**.
 
@@ -132,7 +132,7 @@ session <- bow("https://journals.openedition.org",
 
 ```
 
-Dans un premier temps, on lie la page web de départ à l'objet **session**, puis on extrait les attributs contenant l'URL des volumes. Ensuite, on extrait le texte de l'attribut pour, enfin, coller ce texte (la partie particulière) à la partie générale des adresses URL. Précisons que ces opérations peuvent former des suites d'opérations (pipeline) et, le cas échéant, sont séparées par le symbole **%>%**.
+Dans un premier temps, on associe la page web de départ à l'objet **session**, puis on extrait les attributs contenant les URL des volumes. Ensuite, on extrait le texte de l'attribut pour, enfin, coller ce texte (la partie particulière) à la partie générale des adresses URL. Précisons que ces opérations peuvent former des suites d'opérations (pipeline) et, le cas échéant, sont séparées par le symbole **%>%**.
 
 Dans le script ci-dessous, l'opération de :   
 
@@ -159,7 +159,7 @@ volume_urls <-
 
 ```
 
-Dans un deuxième temps, on extrait l'URL des articles de chaque volume et on la note dans la colonne **HTML_URL**. Ensuite, on navigue vers chaque page web correspondant aux articles pour extraire l'URL des PDF, que l'on notera dans les cellules de la colonne **PDF_URL**. Enfin, la page web HTML et le PDF sont téléchargés via la fonction **rip()** (issue de **polite**), et sont nommés en fonction du numéro de ligne où l’on est rendu dans la structure de données.
+Dans un deuxième temps, on extrait l'URL des articles de chaque volume et on la note dans la colonne **HTML_URL**. Ensuite, on navigue vers chaque page web correspondant à un article pour extraire l'URL du PDF, que l'on notera dans la colonne **PDF_URL**. Enfin, la page web HTML et le PDF sont téléchargés via la fonction **rip()** (issue de **polite**) et nommés en fonction du numéro de ligne où l’on se trouve dans la structure de données.
 
 ```{r 2.2.3 Moissonnage des articles}
 
@@ -247,7 +247,7 @@ L'introduction des documents PDF dans la structure de données implique leur imp
 
 1) Lorsqu'utilisée sur deux vecteurs de même longueur, la fonction **paste()** colle un à un les éléments d'un vecteur avec ceux de l'autre en introduisant entre eux des caractères définis par l'argument **sep**; 
 2) puis, les éléments résultants sont collés les uns à la suite des autres en insérant entre eux des caractères définis par l'argument **collapse**;
-3) pour, finalement, ne former qu'une seule chaîne de caractères. 
+3) pour finalement ne former qu'une seule chaîne de caractères. 
 
 Dans l'exemple suivant, **paste()** assemble chaque page du PDF avec son numéro de page en insérant entre eux les caractères **\\n<page_**, puis colle ces éléments résultants en insérant entre eux les caractères **>\\n**.
 
@@ -281,7 +281,7 @@ saveRDS(dataframe, paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute/0
 
 # 6 Exercices
 
-L'objectif de la série d'exercices est de moissonner la *Revue d'Anthropologie des Connaissances* disponible en ligne sur OpenEdition (https://journals.openedition.org/rac/263). Pour ce faire, nous devons identifier des URL à l'aide de requêtes XPATH. Notons que ces adresses ou hyperliens correspondent généralement à des éléments dont l'attribut **href** spécifie l'URL. Directement dans le navigateur, on peut inspecter un hyperlien en cliquant avec le bouton droit de la souris sur l'élément qui nous intéresse (puis cliquer sur *Inspecter*).
+L'objectif de la série d'exercices est de moissonner la *Revue d'Anthropologie des Connaissances* disponible en ligne sur OpenEdition (https://journals.openedition.org/rac/263). Pour ce faire, nous devons identifier des URL à l'aide de requêtes XPATH. Notons que ces adresses ou hyperliens correspondent généralement à des éléments dont l'attribut **href** spécifie l'URL. Directement dans le navigateur, on peut inspecter un hyperlien en faisant un clic droit sur l'élément qui nous intéresse, puis en cliquant sur *Inspecter*.
 
 ## 6.1 Le moissonnage en pièces détachées
 
@@ -370,7 +370,7 @@ for (article_url in article_urls)
 
 ```
 
-En vous inspirant du script de la section [3 Importation des documents HTML], veuillez importer les documents HTML précédemment téléchargés dans la structure de données. Plus précisément, veuillez inscrire les documents HTML décodés en chaînes de caractères à la colonne **HTML** de la structure de données **df**.
+En vous inspirant du script de la section [3 Importation des documents HTML], veuillez importer les documents HTML précédemment téléchargés dans la structure de données. Plus précisément, veuillez inscrire les documents HTML décodés en chaînes de caractères dans la colonne **HTML** de la structure de données **df**.
 
 ```{r 6.2.2 Importation des documents HTML}
 
