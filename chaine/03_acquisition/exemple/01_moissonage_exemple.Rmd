@@ -48,7 +48,7 @@ Notons que certaines opérations formeront une séquence de sous-opérations (pi
 
 # 1 Installer remotes si nécessaire
 if (!requireNamespace("remotes", quietly = TRUE)) {install.packages("remotes")}
- 
+
 # 2 Installer polite depuis GitHub si nécessaire
 if (!requireNamespace("polite", quietly = TRUE)) {remotes::install_github("dmi3kno/polite")}
 
