@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 
 # 1 Introduction
 
-La collecte de données est l'étape au cours de laquelle on recueille les informations nécessaires à la recherche. Le moissonnage (*scraping* ou *harvesting*) est un moyen parmi d'autres permettant cette collecte de données où l'on explore des sites web, via un script ou un programme, dans le but d'en extraire le contenu. Les pages web renfermant les contenus recherchés sont téléchargées, formant ainsi un ensemble de données brutes qu'on peut éventuellement diviser en :   
+La collecte de données est l'étape au cours de laquelle on recueille les informations nécessaires à la recherche. Le moissonnage (*scraping* ou *harvesting*) est un moyen parmi d'autres de collecter des données, consistant à explorer des sites web via un script ou un programme afin d'en extraire le contenu. Les pages web renfermant les contenus recherchés sont téléchargées, formant ainsi un ensemble de données brutes qu'on peut éventuellement diviser en :   
 
 1) données (les textes étudiés) ;   
 2) métadonnées (les informations utiles à propos des textes étudiés) ;   
@@ -85,17 +85,21 @@ Avant de procéder au moissonnage, spécifions un répertoire **html_download_pa
 
 ```{r 2.1.2 Endroit pour le téléchargement}
 
+download_path <- paste0(getwd(),
+"/chaine/03_acquisition/exemple/donnee_brute"
+)
+
 # 1 Créer le dossier de données brutes s'il n'existe pas ####
-if (!dir.exists(paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute'))) {dir.create(paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute'))}
+if (!dir.exists(download_path) {dir.create(paste0(getwd(),download_path))}
 
 # 2 Noter le chemin d'accès au dossier des articles en format PDF ####
-pdf_download_path <- paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute/PDF')
+pdf_download_path <- paste0(download_path,'/PDF')
 
 # 3 Créer le dossier du chemin d'accès s'il n'existe pas ####
 if (!dir.exists(pdf_download_path)) {dir.create(pdf_download_path)}
 
 # 4 Noter le chemin d'accès au dossier des articles en format HTML ####
-html_download_path <- paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute/HTML')
+html_download_path <- paste0(download_path,'/HTML')
 
 # 5 Créer le dossier du chemin d'accès s'il n'existe pas ####
 if (!dir.exists(html_download_path)) {dir.create(html_download_path)}
@@ -229,7 +233,7 @@ dataframe$HTML <-
   # 1 Énumération des numéros de ligne du dataframe ####
   1:nrow(dataframe) %>%
   # 2 Construire le chemin d'accès de l'article ####
-  paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute/HTML/',.,'.html') %>%
+  paste0(html_download_path,'/',.,'.html') %>%
   # 3 Lire/décoder l'article en format HTML ####
   # read_html(.) # ne permet pas de lire plusieurs fichiers #
   lapply(., function(x) read_html(x)) %>%
@@ -258,7 +262,7 @@ dataframe$PDF <-
   # 1 Énumération des numéros de ligne du dataframe ####
   1:nrow(dataframe) %>%
   # 2 Construire le chemin d'accès de l'article ####
-  paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute/PDF/',.,'.pdf') %>%
+  paste0(pdf_download_path,'/',.,'.pdf') %>%
   # 3 Lire/décoder l'article en format PDF ####
   lapply(., function(x) pdf_text(x)) %>%
   # 4 Transformer l'article en une seule chaîne de caractères ####
@@ -275,7 +279,7 @@ La fonction **saveRDS()** sauvegarde un seul objet au format RDS, qui est compre
 ```{r 5.1 Sauvegarde de la structure de données}
 
 # Sauvegarder le dataframe au format RDS ####
-saveRDS(dataframe, paste0(getwd(),'/chaine/03_acquisition/exemple/donnee_brute/01_moissonage_exemple_dataframe.rds')))
+saveRDS(dataframe, paste0(download_path,'/01_moissonage_exemple_dataframe.rds')))
 
 ```
 
