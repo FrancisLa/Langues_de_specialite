@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 
 # 1 Introduction
 
-La collecte de données est l'étape où l'on recueille les informations nécessaires à la recherche. Le moissonnage (*scraping* ou *harvesting*) est un moyen parmi d'autres permettant cette collecte de données où l'on explore des sites web, via un script ou un programme, dans le but d'en extraire le contenu. Les pages web renfermant les contenus recherchés sont téléchargées, formant ainsi un ensemble de données brutes qu'on peut éventuellement diviser en :   
+La collecte de données est l'étape au cours de laquelle on recueille les informations nécessaires à la recherche. Le moissonnage (*scraping* ou *harvesting*) est un moyen parmi d'autres permettant cette collecte de données où l'on explore des sites web, via un script ou un programme, dans le but d'en extraire le contenu. Les pages web renfermant les contenus recherchés sont téléchargées, formant ainsi un ensemble de données brutes qu'on peut éventuellement diviser en :   
 
 1) données (les textes étudiés) ;   
 2) métadonnées (les informations utiles à propos des textes étudiés) ;   
