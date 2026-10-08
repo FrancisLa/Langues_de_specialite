@@ -1,0 +1,199 @@
+---
+title: "Scrapping"
+author: "Francis Lareau"
+date: "21/01/2020"
+output: html_document
+    number_sections: yes
+    toc: yes
+---
+
+# 1 Plan de cours
+
+# 2 Préalables
+
+## 2.1 Librairies
+
+```{r 2.1.1}
+#install.packages("RSelenium")
+#install.packages("xlsx")
+library(RSelenium)
+library(binman)
+library(stringr)
+library(xlsx)
+library(dplyr)
+
+```
+
+
+chromeversion:
+
+Create a string path to the chrome application folder where there is a folder that contains the version number. 
+String extract the version number on that folder and replace all dots with a \\. (you need another backslash to escape the backslash) to use it in the next str_extract.
+
+chromedriver:
+
+String extract all the matches of the object chromeversion added with another digit paste0(chromeversions, '\\d+') from the string resulting from list_versions("chromedriver) (this is a binman function), convert to numeric versions and get the lowest version min() or alternatively the highest using max().
+
+(Danny-dK, source:https://github.com/ropensci/RSelenium/issues/198)
+
+```{r 2.1.2}
+
+chromeversion <- toString(dir(path = 'C:/Program Files (x86)/Google/Chrome/Application/')) %>% 
+                 str_extract(., '^\\d+\\.\\d+\\.\\d+\\.') %>% 
+                 str_replace_all(., '\\.', '\\\\.')  
+
+chromedriver <-  str_extract_all(toString(list_versions("chromedriver")), paste0(chromeversion, '\\d+'), simplify = TRUE) %>% 
+                 as.numeric_version(.) %>% 
+                 min(.)
+
+```
+
+```{r dataframe, echo=FALSE}
+df <- data.frame(Journal=character(),
+                 Date=character(),
+                 Volume=character(),
+                 Vol_title=character(),
+                 Vol_dir=character(),
+                 Vol_sect=character(),
+                 Art_ID=character(),
+                 Art_author=character(),
+                 Art_title=character(),
+                 Art_resume=character(),
+                 Art_abstract=character(),
+                 Art_motsclefs=character(),
+                 Art_keywords=character(),
+                 Article=character(),
+                 Art_notes=character(),
+                 Art_refs=character(),
+                 Art_lang=character(),
+                 Art_doi=character(),
+                 Art_type=character(),
+                 XML=character(),
+                 XML_URL=character(),
+                 PDF=character(),
+                 PDF_URL=character(),
+                 Time=character(),
+                 stringsAsFactors=FALSE)
+
+```
+
+## 2.2 Ouvrir le navigateur distant
+
+
+```{r 2.2.1}
+
+#cprof <- getChromeProfile(dataDir = "C:/Users/franc/AppData/Local/Google/Chrome", profileDir = "Profile 2")
+download_path = file.path(getwd(),'Downloads')
+dir.create(download_path, recursive = TRUE)
+
+eCaps <- list(
+  chromeOptions = 
+    list(args = c('--no-sandbox', '--disable-gpu', '--start-maximized','--disable-popup-blocking','--disable-extensions'),
+         prefs = list(
+           "profile.default_content_settings.popups" = 0L,
+           "profile.default_content_setting_values.automatic_downloads" = 1L,
+           "download.prompt_for_download" = FALSE,
+           "download.directory_upgrade" = TRUE,
+           "safebrowsing.enabled" = TRUE,
+           "safebrowsing.disable_download_protection" = TRUE,
+           "download.default_directory" = str_replace_all(download_path, '/', '\\\\')
+           )
+         )
+  )
+
+driver <- rsDriver(browser = "chrome", port = 4567L, geckover = NULL, 
+                   chromever =  toString(chromedriver), iedrver = NULL, 
+                   phantomver = NULL, verbose = FALSE, extraCapabilities = eCaps)
+
+remDr <- driver$client
+
+```
+
+
+```{r cars}
+
+remDr$navigate("https://journals.openedition.org/aad/2969")
+Sys.sleep(2)
+next_issue = TRUE
+
+while (next_issue) {
+  current_issue = unlist(remDr$getCurrentUrl())
+  vol_title = unlist(remDr$findElement('xpath','.//span[@class="title"]')$getElementText())
+  vol_dir = unlist(remDr$findElement('xpath','.//div[@id="publiDirector"]')$getElementText())
+  articles_links = remDr$findElements('xpath', '//div[@class="title"]/a') %>%
+  sapply(., function(article_link){article_link$getElementAttribute("href")})
+  #articles_links = sapply(articles_links, function(article_link){article_link$getElementAttribute("href")})
+  for (article_link in articles_links) {
+    article_link = unlist(article_link)
+    remDr$navigate(article_link)
+    Sys.sleep(2)
+    pdf_link = unlist(remDr$findElement('xpath','.//a[@id="wDownload"]')$getElementAttribute("href"))
+    row_id=nrow(df)+1
+    df[row_id,] = ''
+    df[row_id,'Vol_title'] = vol_title
+    df[row_id,'Vol_dir'] = vol_dir
+    df[row_id,'XML'] = unlist(remDr$getPageSource())
+    df[row_id,'XML_URL'] = article_link
+    df[row_id,'PDF_URL'] = pdf_link
+    df[row_id,'Time'] = as.character(Sys.time())
+    # remDr$navigate(pdf_link)
+    # Sys.sleep(10)
+    # tmpshot = fileSnapshot(download_path)
+    # latest_file = rownames(tmpshot$info[which.max(tmpshot$info$mtime),]) %>%
+    # file.path(download_path,.)
+    # new_name = file.path(download_path,paste(row_id,sep='','.pdf'))
+    # file.rename(latest_file,new_name)
+  }
+  remDr$navigate(current_issue)
+  Sys.sleep(2)
+  next_issue = tryCatch(
+    expr = {
+      next_issue_link = unlist(remDr$findElement('xpath','.//a[@class="goNext"]')$getElementAttribute("href"))
+      remDr$navigate(next_issue_link)
+      TRUE
+    },
+    error = function(e){return(FALSE)}
+    )
+  }
+  
+
+```
+
+## Fermer le navigateur distant
+
+```{r cars}
+#remDr$close()
+driver$server$stop() 
+rm(remDr)
+gc()
+```
+
+```{r pressure, echo=FALSE}
+
+write.xlsx2(df, "dataframe_scrapping.xlsx", sheetName = "Sheet1",
+  col.names = TRUE, row.names = TRUE, append = FALSE)
+
+save(
+  df, # Les variables à sauvegarder
+  file = "dataframe_scrapping.RData" # On spécifie le nom du fichier dans le paramètre "file"
+)
+
+```
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
