@@ -291,7 +291,7 @@ La fonction **saveRDS()** sauvegarde un seul objet au format RDS, qui est compre
 ```{r 5.1 Sauvegarde de la structure de données}
 
 # Sauvegarder le dataframe au format RDS ####
-saveRDS(dataframe, paste0(download_path,'/01_moissonage_exemple_dataframe.rds')))
+saveRDS(dataframe, paste0(download_path,'/01_moissonage_exemple_dataframe.rds'))
 
 ```
 
