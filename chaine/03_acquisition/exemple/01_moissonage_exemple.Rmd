@@ -186,7 +186,6 @@ for (volume_url in volume_urls[[length(volume_urls)-1]])
     # 2.1 Lire la page web du volume ####
     scrape(volume_page) %>%
     # 2.2 Extraire les attributs où se trouvent les URL d'articles ####
-    # xml_find_all(.,xpath='//*[@id="main"]/ul/li/ul/li/div/a/@href') %>% #### # variante non fonctionnelle ####
     xml_find_all(., '//div[@class="title"]/a/@href') %>% 
     # 2.3 Extraire le texte de la partie particulière des URL ####
     xml_text(.) %>%
