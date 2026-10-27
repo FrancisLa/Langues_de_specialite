@@ -74,13 +74,13 @@ par cette licence doit :
 
 Pour réutiliser un document sans modification :
 
-> Adapté de « *Corpus et discours de spécialité : concevoir et conduire
+> Adapté de « *Langues de spécialité : concevoir et conduire
 > une enquête* », Francis Lareau, 2026, sous licence
 > [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 Pour réutiliser un document avec modifications :
 
-> Adapté de « *Corpus et discours de spécialité : concevoir et conduire
+> Adapté de « *Langues de spécialité : concevoir et conduire
 > une enquête* », Francis Lareau, 2026, sous licence
 > [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 > Modifications apportées : [décrire brièvement les modifications].
