@@ -164,8 +164,8 @@ Le fichier `inventaire.csv` constitue le registre principal du corpus.
 
 ```csv
 id_document;id_paire;titre;source;url;date_publication;date_collecte;langue;genre;sous_corpus;statut;fichier_source;fichier_prepare;conditions_acces
-D001;P001;Titre de l'article;Nom de la source;[https://exemple.org/article;2024-01-15;2026-10-07;fr;article;scientifique;retenu;article_001.pdf;article_001.txt;ouvert](https://exemple.org/article;2024-01-15;2026-10-07;fr;article;scientifique;retenu;article_001.pdf;article_001.txt;ouvert)
-D002;P001;Titre du communiqué;Nom de l'institution;[https://exemple.org/communique;2024-02-02;2026-10-07;fr;communique;institutionnel;retenu;communique_001.html;communique_001.txt;ouvert](https://exemple.org/communique;2024-02-02;2026-10-07;fr;communique;institutionnel;retenu;communique_001.html;communique_001.txt;ouvert)
+D001;P001;Titre de l'article;Nom de la source;https://exemple.org/article;2024-01-15;2026-10-07;fr;article;scientifique;retenu;article_001.pdf;article_001.txt;ouvert
+D002;P001;Titre du communiqué;Nom de l'institution;https://exemple.org/communique;2024-02-02;2026-10-07;fr;communique;institutionnel;retenu;communique_001.html;communique_001.txt;ouvert
 ```
 
 ### Identifiants
