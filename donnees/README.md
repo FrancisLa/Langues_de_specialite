@@ -29,15 +29,10 @@ donnees/
 │   └── [documents sources, si partage autorisé]
 ├── intermediaires/
 │   ├── README.md
-│   └── [fichiers extraits ou temporaires, si partage autorisé]
-├── preparees/
-│   ├── README.md
-│   └── [textes préparés pour l’analyse, si partage autorisé]
-└── privees/
-    ├── README.md           # Consigne visible sur GitHub
-    ├── sources/            # Contenu local, non versionné, si partage non autorisé
-    ├── intermediaires/     # Contenu local, non versionné, si partage non autorisé
-    └── preparees/          # Contenu local, non versionné, si partage non autorisé
+│   └── [fichiers extraits ou temporaires]
+└── preparees/
+    ├── README.md
+    └── [textes préparés pour l’analyse]
 ```
 
 | Élément | Fonction | Versionné dans Git ? |
@@ -49,60 +44,6 @@ donnees/
 | `sources/` | Données originales ou brutes | Selon les droits |
 | `intermediaires/` | Fichiers extraits ou temporaires | Souvent non |
 | `preparees/` | Données nettoyées, segmentées ou annotées | Selon les droits |
-| `privees/README.md` | Explique les règles du stockage local non partageable | Oui |
-| Autres contenus de `privees/` | Sources, fichiers intermédiaires et données préparées non destinés au dépôt | Non |
-
----
-
-## Où déposer les données ?
-
-L’emplacement dépend de leur statut de partage et des règles de stockage
-applicables au projet.
-
-### Données partageables ou sans restriction particulière
-
-Utiliser les dossiers correspondant à leur état de transformation :
-
-- `sources/` : documents tels qu’acquis ;
-- `intermediaires/` : extractions et transformations intermédiaires ;
-- `preparees/` : données utilisées pour l’analyse.
-
-Ces dossiers restent ignorés par Git par défaut. Une autorisation de
-partage ne signifie pas que tous les fichiers doivent être versionnés :
-leur volume, leur utilité et leur mode de conservation doivent aussi être
-considérés.
-
-### Données non partageables
-
-Lorsque leur stockage local est autorisé, utiliser :
-
-- `privees/sources/` ;
-- `privees/intermediaires/` ;
-- `privees/preparees/`.
-
-Les données dérivées ne deviennent pas automatiquement partageables :
-un texte extrait, une annotation ou un tableau peut encore contenir des
-informations soumises à des restrictions.
-
-Seul `privees/README.md` est conservé dans Git.
-
-### Données nécessitant un stockage particulier
-
-Si les règles institutionnelles, les autorisations ou les conditions
-d’utilisation exigent un stockage spécifique, utiliser l’espace autorisé
-plutôt que ce dossier local.
-
-Documenter alors les conditions d’accès dans ce README, sans publier de
-secret, de lien d’accès confidentiel ou de chemin personnel inutile.
-
-### Attention
-
-Le nom `privees/` et le fichier `.gitignore` ne constituent pas un
-dispositif de sécurité. Ils ne chiffrent pas les données et ne remplacent
-pas les autorisations, le contrôle d’accès ou la sauvegarde.
-
-Les fichiers ignorés ne sont pas sauvegardés par GitHub. Leur conservation
-doit être organisée dans un espace autorisé.
 
 ---
 
@@ -222,9 +163,9 @@ Le fichier `inventaire.csv` constitue le registre principal du corpus.
 ### Exemple de structure
 
 ```csv
-id_document;id_paire;titre;source;url;date_publication;date_collecte;langue;genre;sous_corpus;statut;fichier_source;fichier_prepare;conditions_acces;partage_autorise
-D001;P001;Document fictif A;Source fictive;https://example.org/article;2024-01-15;2026-10-28;fr;article;scientifique;retenu;donnees/sources/D001_source.pdf;donnees/preparees/D001_prepare.txt;a_verifier;a_verifier
-D002;P001;Document fictif B;Source fictive;https://example.org/communique;2024-02-02;2026-10-28;fr;communique;institutionnel;retenu;donnees/privees/sources/D002_source.html;donnees/privees/preparees/D002_prepare.txt;acces_restreint;non
+id_document;id_paire;titre;source;url;date_publication;date_collecte;langue;genre;sous_corpus;statut;fichier_source;fichier_prepare;conditions_acces
+D001;P001;Titre de l'article;Nom de la source;[https://exemple.org/article;2024-01-15;2026-10-07;fr;article;scientifique;retenu;article_001.pdf;article_001.txt;ouvert](https://exemple.org/article;2024-01-15;2026-10-07;fr;article;scientifique;retenu;article_001.pdf;article_001.txt;ouvert)
+D002;P001;Titre du communiqué;Nom de l'institution;[https://exemple.org/communique;2024-02-02;2026-10-07;fr;communique;institutionnel;retenu;communique_001.html;communique_001.txt;ouvert](https://exemple.org/communique;2024-02-02;2026-10-07;fr;communique;institutionnel;retenu;communique_001.html;communique_001.txt;ouvert)
 ```
 
 ### Identifiants
@@ -249,7 +190,7 @@ La signification détaillée de chaque colonne est documentée dans :
 donnees/dictionnaire_metadonnees.md
 ```
 
-Exemple :
+Exemple minimal :
 
 | Colonne | Type | Description | Exemple |
 |---|---|---|---|
@@ -265,9 +206,6 @@ Exemple :
 | `sous_corpus` | Texte | Groupe analytique du document | `scientifique` |
 | `statut` | Texte | État dans le protocole de sélection | `retenu` |
 | `conditions_acces` | Texte | Conditions de consultation ou partage | `ouvert` |
-| `fichier_source` | Texte | Chemin relatif depuis la racine du projet vers le document source | `donnees/privees/sources/D002_source.html` |
-| `fichier_prepare` | Texte | Chemin relatif vers les données préparées | `donnees/privees/preparees/D002_prepare.txt` |
-| `partage_autorise` | Catégorie | Autorisation de redistribution du fichier, distincte de son accessibilité | `oui`, `non`, `a_verifier` |
 
 ---
 
@@ -275,21 +213,12 @@ Exemple :
 
 Les données sont séparées selon leur statut de transformation.
 
-| État des données | Emplacement habituel | Emplacement local non partageable, si autorisé | Description |
-|---|---|---|---|
-| Source | `donnees/sources/` | `donnees/privees/sources/` | Documents tels qu’acquis |
-| Intermédiaire | `donnees/intermediaires/` | `donnees/privees/intermediaires/` | Extractions et transformations intermédiaires |
-| Préparée | `donnees/preparees/` | `donnees/privees/preparees/` | Données utilisées pour l’analyse |
-| Résultat | `resultats/` | Stockage non partageable autorisé | Tableaux, figures, extraits et autres sorties |
-
-Les données sources ne sont pas modifiées directement.
-
-Les données privées ne doivent pas être recopiées dans les dossiers
-habituels pour contourner leur exclusion de Git.
-
-Avant de publier un résultat, vérifier qu’il ne contient pas de données
-personnelles, d’extraits non autorisés ou d’informations permettant de
-retrouver des contenus confidentiels.
+| Version | Emplacement | Description |
+|---|---|---|
+| Source | `donnees/sources/` | Fichiers tels qu’acquis ou téléchargés |
+| Intermédiaire | `donnees/intermediaires/` | Textes extraits, fichiers temporaires, résultats de conversion |
+| Préparée | `donnees/preparees/` | Textes nettoyés, segmentés, annotés ou représentés pour l’analyse |
+| Résultat | `resultats/` | Tableaux, figures, extraits et sorties analytiques |
 
 ### Règle de conservation
 
@@ -377,13 +306,7 @@ chaine/06_validation/
 
 ### Statut de partage
 
-Indiquer le statut de chaque source ou sous-corpus. Plusieurs situations
-peuvent coexister dans un même projet : certains documents sont
-partageables, d’autres récupérables sous conditions et d’autres non
-redistribuables.
-
-L’accès public à un document ne suffit pas à établir un droit de
-redistribution.
+Choisir et compléter l’une des situations suivantes.
 
 #### Option A — Données incluses dans le dépôt
 
@@ -427,21 +350,6 @@ Le dépôt fournit néanmoins :
 - les scripts ou procédures ;
 - les résultats partageables ;
 - une procédure de vérification partielle.
-
-Lorsque le stockage local est autorisé, les fichiers concernés sont
-conservés dans :
-
-- `donnees/privees/sources/` ;
-- `donnees/privees/intermediaires/` ;
-- `donnees/privees/preparees/`.
-
-Sinon, ils restent dans l’espace de stockage autorisé par le projet ou
-l’établissement.
-
-Le dépôt contient uniquement la documentation et les éléments dont le
-partage est permis. L’inventaire, les exclusions, les journaux et les
-résultats doivent eux aussi être vérifiés avant publication : les
-métadonnées peuvent contenir des informations sensibles.
 
 ### Informations à ne jamais déposer
 
