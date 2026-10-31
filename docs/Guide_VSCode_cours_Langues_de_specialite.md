@@ -116,15 +116,11 @@ l’ouvrir directement dans VS Code.
 2. Choisissez **Open Folder…**
    - Sur macOS : **Open…**
 3. Allez dans votre dossier Google Drive.
-4. Ouvrez le dossier :
+4. Sélectionnez le dossier de votre dépôt, par exemple :
    ```text
-   GitHub/
+   LSP_Nom_Prenom
    ```
-5. Sélectionnez le dossier du dépôt, par exemple :
-   ```text
-   Langues_de_specialite
-   ```
-6. Cliquez sur **Select Folder** ou **Ouvrir**.
+5. Cliquez sur **Select Folder** ou **Ouvrir**.
 
 VS Code affichera alors l’arborescence du dépôt dans la barre latérale
 gauche.
@@ -132,7 +128,7 @@ gauche.
 ### Structure attendue
 
 ```text
-Langues_de_specialite/
+LSP_Nom_Prenom/
 ├── chaine/
 ├── configuration/
 ├── donnees/
