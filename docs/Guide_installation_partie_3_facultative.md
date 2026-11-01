@@ -1,10 +1,10 @@
-# Partie 2 — Exécuter les notebooks en local
+# Partie 3 — Exécuter les notebooks en local — Facultatif 
 
 ## Guide facultatif — Windows et macOS
 
-Cours : Langues de spécialité
+Cours : Langues de spécialité — Enseignant : Francis Lareau
 
-Ce guide s’adresse aux personnes qui souhaitent exécuter les notebooks et les scripts sur leur propre ordinateur, dans VS Code.
+Cette troisième partie est optionnelle. Ce guide s’adresse aux personnes qui souhaitent exécuter les notebooks et les scripts sur leur propre ordinateur, dans VS Code.
 
 > Cette installation n’est pas obligatoire pour réussir le cours. Vous pouvez utiliser Google Colab sans installer Python sur votre ordinateur.
 
@@ -216,143 +216,24 @@ Vérifiez le noyau dans chaque notebook. La sélection de l’interpréteur des 
 
 ## 7. Tester le travail local
 
-### 7.1 Créer un notebook d’essai
+### 7.1 Créer un notebook d’essai dans Google Colab
 
-1. Dans VS Code, lancez `File -> New File -> Jupyter Notebook`.
-2. Enregistrez le fichier que vous pouvez nommer `test_environnement.ipynb` dans un nouveau dossier que vous pouvez nommer **test** à la racine du dépôt, s’il n’existe pas déjà.
-3. Choisissez le noyau de `.venv`.
-4. Exécutez :
+Suivez les instructions de la partie 2.
 
-```python
-import platform
-import sys
+### 7.2 Récupérer le notebook sur votre ordinateur
 
-print("Version de Python :", platform.python_version())
-print("Exécutable :", sys.executable)
-print("Environnement virtuel :", sys.prefix != sys.base_prefix)
-```
+L’enregistrement depuis Colab sur GitHub modifie le dépôt en ligne. Il ne met pas
+automatiquement à jour le dossier cloné sur votre ordinateur.
 
-En local, le chemin doit pointer vers `.venv` et la dernière valeur doit être `True`.
+1. Dans GitHub Desktop, sélectionnez le bon dépôt.
+2. Cliquez sur `Fetch origin`, puis sur `Pull origin` si proposé.
+3. Vérifiez la présence de `test/test_environnement.ipynb` dans le
+   dossier local du dépôt, situé dans Drive.
 
-Enregistrez, fermez le notebook et attendez sa synchronisation dans Drive.
+Vous pouvez ensuite ouvrir ce fichier dans VS Code et choisir le noyau
+Python 3.12 de `.venv` pour le tester en local.
 
-### 7.2 Ouvrir le même fichier dans Colab
-
-1. Dans le navigateur, ouvrez Mon Drive → `GitHub` → votre dépôt.
-2. Ouvrez le notebook avec `Google Colaboratory`.
-3. Si l’application n’est pas proposée, recherchez-la dans la connexion d’applications de Drive, selon les autorisations institutionnelles.
-4. Vérifiez qu’il s’agit du fichier du dépôt, et non d’une copie enregistrée ailleurs.
-5. Exécutez la cellule d’information.
-
-Colab utilise son propre Python. Il peut avoir une autre version que Python 3.12 et n’utilise pas `.venv`, même si ce dossier est visible dans Drive.
-
-N’activez pas `.venv` et ne lancez pas ses exécutables depuis Colab. Les bibliothèques nécessaires doivent être installées dans la session Colab selon les consignes de l’activité.
-
-### 7.3 Définir le dossier de travail commun
-
-Cette cellule peut être reprise dans les notebooks après adaptation :
-
-```python
-from pathlib import Path
-import platform
-import os
-
-# True dans VS Code ; False dans Google Colab.
-IS_LOCAL = False
-NOM_PROJET = "LSP_nom_prenom"
-
-if IS_LOCAL:
-    racines_locales = {
-        "Windows": Path(r"C:\CHEMIN_A_REMPLACER\Mon Drive"),
-        "Darwin": Path("/CHEMIN_A_REMPLACER/Mon Drive"),
-    }
-    systeme = platform.system()
-    if systeme not in racines_locales:
-        raise RuntimeError(f"Système non prévu : {systeme}")
-    racine_drive = racines_locales[systeme]
-else:
-    from google.colab import drive
-    drive.mount("/content/drive")
-    racine_drive = Path("/content/drive/MyDrive")
-
-chemin_projet = racine_drive / "GitHub" / NOM_PROJET
-
-if not chemin_projet.is_dir():
-    raise FileNotFoundError(
-        f"Dossier introuvable : {chemin_projet}. "
-        "Vérifiez le chemin, le compte Google et la synchronisation."
-    )
-
-os.chdir(chemin_projet)
-print("Dossier de travail :", Path.cwd())
-```
-
-`Darwin` désigne macOS. En local, utilisez `IS_LOCAL = True` et le vrai chemin de Mon Drive. Dans Colab, utilisez `False` et autorisez le montage.
-
-Ne manipulez pas `.git` et ne faites pas d’opérations Git sur ce dossier depuis Colab. Réalisez les commits, les récupérations et les envois depuis l’ordinateur, dans Desktop.
-
-Les variables en mémoire ne sont pas sauvegardées dans Drive automatiquement. Les sorties durables doivent être enregistrées dans les emplacements autorisés, pas seulement dans l’espace temporaire de Colab.
-
-## 8. Routine de travail
-
-### Début de séance
-
-1. Vérifiez qu’aucune autre session ne modifie la même copie.
-2. Attendez la fin de la synchronisation Drive.
-3. Dans Desktop, examinez les changements, puis faites Fetch et Pull si nécessaire et sans conflit.
-4. En local, activez l’environnement et sélectionnez son noyau.
-5. Ouvrez le notebook dans VS Code ou Colab, pas dans les deux simultanément.
-
-Activation Windows :
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Activation macOS :
-
-```bash
-source .venv/bin/activate
-```
-
-### Fin de séance
-
-1. Enregistrez les fichiers et vérifiez les sorties.
-2. Si vous êtes dans Colab, vérifiez l’emplacement d’enregistrement et fermez sa session d’édition.
-3. Attendez que les fichiers modifiés soient disponibles sur l’ordinateur.
-4. Dans Desktop, sélectionnez uniquement les fichiers utiles et autorisés ; `.venv` ne doit pas être ajouté.
-5. Créez un commit, faites `Push origin`, puis vérifiez GitHub.
-6. Laissez Drive terminer sa synchronisation.
-
-Drive synchronise des fichiers ; Git échange des commits. L’un ne remplace pas l’autre.
-
-## 9. Limites du miroir et protection des fichiers
-
-Le mode miroir permet d’utiliser un dossier local, mais ne transforme pas l’environnement en installation universelle.
-
-- Utilisez cette `.venv` sur l’ordinateur où elle a été créée.
-- Ne réutilisez pas sa copie synchronisée sur un autre ordinateur, même si Drive l’a entièrement téléchargée.
-- Si vous changez d’ordinateur, de système ou de chemin du projet, faites recréer un environnement adapté. Ne lancez pas deux recréations concurrentes dans la même copie synchronisée.
-- Ne partagez pas cette copie Drive du dépôt entre équipiers ; chaque personne garde son propre clone.
-- Un environnement contient de nombreux fichiers et peut augmenter le temps de synchronisation et l’espace utilisé. Le miroir ne garantit pas que tous ses éléments seront synchronisés sans problème.
-- Si Drive crée des copies conflictuelles ou si Python ne retrouve plus ses fichiers, conservez votre code et vos données et demandez de l’aide pour recréer l’environnement. Il est recréable ; vos sources ne doivent jamais être stockées à l’intérieur.
-
-N’ajoutez aucun mot de passe, token ou contenu non autorisé au dépôt. Inspectez aussi les sorties des notebooks. Un fichier privé ou ignoré par Git peut tout de même être stocké dans Drive : cette conservation doit être autorisée.
-
-## 10. Résultat attendu et checklist
-
-```text
-Mon Drive/
-└── GitHub/
-    └── LSP_nom_prenom/
-        ├── .git/
-        ├── .gitignore
-        ├── .venv/                   # Local, synchronisé par Drive, ignoré par Git
-        ├── README.md
-        └── test_environnement.ipynb
-```
-
-Les contenus pédagogiques du cours seront ajoutés séparément.
+## 8. Résultat attendu et checklist
 
 - [ ] Drive utilise le mode miroir et dispose d’espace suffisant.
 - [ ] VS Code ouvre la racine du bon dépôt.
@@ -360,15 +241,8 @@ Les contenus pédagogiques du cours seront ajoutés séparément.
 - [ ] Python 3.12 fonctionne dans `.venv`.
 - [ ] `ipykernel` est installé dans cet environnement.
 - [ ] VS Code utilise le bon interpréteur et le bon noyau.
-- [ ] Colab utilise son propre environnement, pas `.venv`.
 - [ ] Je ne modifie pas simultanément le même notebook dans deux environnements.
 - [ ] Je sais enregistrer, attendre la synchronisation, commiter et envoyer.
-
-Vous pouvez quitter un environnement activé dans le terminal avec :
-
-```bash
-deactivate
-```
 
 Si vous préférez travailler uniquement dans Colab, il n’est pas nécessaire de terminer cette installation locale.
 

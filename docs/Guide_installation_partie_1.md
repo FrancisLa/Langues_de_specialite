@@ -1,17 +1,26 @@
-# Préparer son projet de cours — GitHub, Google Drive, VS Code et Python
+# Préparer son projet — GitHub, Google Drive, Desktop et VS Code
 
-Cours : Langues de spécialité — Windows et macOS
+Cours : Langues de spécialité — Enseignant : Francis Lareau
 
-Ce guide permet de créer votre dépôt personnel, de le cloner dans Google Drive, puis de préparer le travail en local dans VS Code ou à distance dans Google Colab.
+Cette première partie vous accompagne dans la création de votre dépôt
+personnel sur GitHub, l’installation de sa copie locale dans Google Drive
+et la préparation de VS Code pour modifier les documents du projet,
+notamment les fichiers Markdown.
 
-Les fichiers et gabarits du cours seront ajoutés lors d’une étape distincte. Ici, vous préparez votre propre espace de travail et vérifiez sa connexion à GitHub.
+À cette étape, vous mettez en place l’espace qui accueillera votre travail.
+Les fichiers et gabarits fournis par le professeur y seront ajoutés dans
+la partie 2, qui expliquera également comment utiliser les notebooks dans
+Google Colab et enregistrer votre travail sur GitHub.
+
+La partie 3, **facultative**, présente l’installation de Python pour exécuter
+le code sur votre propre ordinateur. Elle n’est pas nécessaire si vous
+choisissez de travailler dans Colab.
 
 Parcours :
 
 ```text
 Compte GitHub → dépôt privé → Google Drive → GitHub Desktop
-→ clonage dans Drive → premier commit et push
-→ VS Code et Python → accès depuis Colab
+→ clonage dans Drive → VS Code
 ```
 
 ## 1. Créer votre compte GitHub et le dépôt du cours
