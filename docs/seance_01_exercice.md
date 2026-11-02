@@ -151,7 +151,8 @@ Langues de spécialité — Prénom Nom — Prise de contact
 ### Contenu attendu
 
 - votre prénom et votre nom ;
-- l’état de votre installation : terminée ou difficulté rencontrée ;
+- l’état de votre connaissance en informatique : débutant, cours d'introduction à Python par exemple;
+- l’état de votre installation des deux guides: terminée ou difficulté rencontrée ;
 - vos premières questions, si vous en avez.
 
 Chaque étudiant envoie son propre courriel, même en cas de travail collectif, afin que je dispose de l’adresse de chacun. Utilisez une adresse que vous consultez régulièrement.
