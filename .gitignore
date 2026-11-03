@@ -125,3 +125,10 @@ Desktop.ini
 ~$*
 *.bak
 *.temp
+
+# ------------------------------------------------------------
+# 8. Ressources locales du cours
+# ------------------------------------------------------------
+
+# Ressources locales du cours
+/docs/ressources_cours/
