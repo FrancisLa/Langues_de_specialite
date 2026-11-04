@@ -42,30 +42,24 @@ docs/
 │
 ├── syllabus/
 │   ├── README.md
-│   ├── syllabus_cours.pdf
-│   └── syllabus_cours.docx
+│   └── syllabus_cours.md
 │
 ├── guides/
 │   ├── README.md
-│   ├── demarrer_un_projet.md
-│   ├── utiliser_git_github.md
-│   ├── choisir_une_licence.md
-│   ├── conventions_nommage.md
-│   ├── rediger_un_article_imrad.md
-│   └── gerer_donnees_et_acces.md
+│   ├── guide_installation_partie_1.md
+│   ├── guide_installation_partie_2.md
+│   ├── guide_installation_partie_3_facultative.md
+│   └── demarrage.ipynb
 │
 ├── references/
 │   ├── README.md
 │   └── references.bib
 │
-└── modeles/
+└── seances/
     ├── README.md
-    ├── modele_question_recherche.md
-    ├── modele_plan_corpus.md
-    ├── modele_inventaire.csv
-    ├── modele_journal_recherche.md
-    ├── modele_protocole_annotation.md
-    └── modele_article_imrad.md
+    ├── seance_01_exercice.md
+    ├── seance_01_powerpoint.pdf
+    ...
 
 ---
 
@@ -84,8 +78,7 @@ docs/syllabus/
 
 | Fichier | Fonction |
 |---|---|
-| `syllabus_cours.pdf` | Version stable distribuée aux étudiants |
-| `syllabus_cours.docx` | Version éditable destinée à l’enseignant |
+| `syllabus_cours.md` | Version stable distribuée aux étudiants |
 | `README.md` | Date, version, statut et changements importants |
 
 ---
@@ -96,22 +89,18 @@ Ce dossier contient les guides permanents utiles pendant tout le semestre.
 
 ```text
 docs/guides/
-├── demarrer_un_projet.md
-├── utiliser_git_github.md
-├── choisir_une_licence.md
-├── conventions_nommage.md
-├── rediger_un_article_imrad.md
-└── gerer_donnees_et_acces.md
+├── guide_installation_partie_1.md
+├── guide_installation_partie_2.md
+├── guide_installation_partie_3_facultative.md
+└── demarrage.ipynb
 ```
 
 | Guide | Contenu attendu |
 |---|---|
-| `demarrer_un_projet.md` | Création d’un dépôt, clonage du gabarit, première structure |
-| `utiliser_git_github.md` | Commits, branches, dépôts privés, collaborateurs, `.gitignore` |
-| `choisir_une_licence.md` | Différence entre code, documentation et données ; choix de licence |
-| `conventions_nommage.md` | Noms de fichiers, versions, identifiants de documents et de résultats |
-| `rediger_un_article_imrad.md` | Attentes pour Introduction, Méthodes, Résultats et Discussion |
-| `gerer_donnees_et_acces.md` | Provenance, licences, conditions d’accès, données sensibles et partage |
+| `guide_installation_partie_1.md` | Création d’un dépôt, première structure, installation des outils |
+| `guide_installation_partie_2.md` | Clonage du gabarit, `.gitignore` |
+| `guide_installation_partie_3_facultative.md` | Python en local |
+| `demarrage.ipynb` | Code de demarrage |
 
 ---
 
@@ -126,29 +115,16 @@ docs/references/
 
 ---
 
-### `modeles/`
+### `seances/`
 
-Ce dossier contient des fichiers que les étudiants peuvent copier et adapter dans leur dépôt privé.
+Ce dossier contient les exercices et les powerpoints des seances.
 
 ```text
-docs/modeles/
-├── modele_question_recherche.md
-├── modele_plan_corpus.md
-├── modele_inventaire.csv
-├── modele_journal_recherche.md
-├── modele_protocole_annotation.md
-└── modele_article_imrad.md
+docs/seances/
+├── seance_01_exercice.md
+├── seance_01_powerpoint.pdf
+└...
 ```
-
-| Modèle | Utilité |
-|---|---|
-| `modele_question_recherche.md` | Définir objet, question, sous-questions, périmètre et hors-périmètre |
-| `modele_plan_corpus.md` | Décrire sources, genres, critères et unités d’analyse |
-| `modele_inventaire.csv` | Créer un registre de documents et métadonnées |
-| `modele_journal_recherche.md` | Documenter décisions, alternatives, contrôles et conséquences |
-| `modele_protocole_annotation.md` | Définir catégories, exemples, contre-exemples et procédures |
-| `modele_article_imrad.md` | Structurer le texte final |
-
 
 ## Licence et réutilisation
 
