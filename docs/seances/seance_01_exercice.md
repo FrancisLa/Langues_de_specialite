@@ -6,7 +6,7 @@ Ce premier travail comporte trois volets : préparer votre environnement, explor
 
 À ce stade, il ne s’agit pas de choisir définitivement votre sujet, mais de commencer à relier des questions sur les langues de spécialité à des textes effectivement accessibles.
 
-Échéance : lundi 9 novembre.
+Échéance : prochain cours (seance 2).
 
 ## 1. Préparer votre environnement de travail
 

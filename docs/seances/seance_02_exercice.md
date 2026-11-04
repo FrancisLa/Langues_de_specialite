@@ -82,7 +82,7 @@ Avant de décider quoi collecter, regardez attentivement ce que vous allez colle
 4. Repérez les métadonnées disponibles : titre, auteurs, date, numéro, résumé, mots-clés, langue, DOI, URL, format HTML ou PDF.
 5. Lisez des passages assez longs pour observer le phénomène étudié, pas seulement les titres et les résumés.
 6. Cherchez au moins un cas où l'organisation de la source complique votre projet : numéro thématique, article sans résumé, mots-clés absents, plusieurs langues, document de type particulier.
-7. Consultez les conditions d'accès et d'utilisation, ainsi que le fichier `robots.txt` du site (par exemple https://journals.openedition.org/robots.txt). Notez les règles pertinentes. N'effectuez aucun moissonnage massif à cette étape.
+7. Consultez les conditions d'accès et d'utilisation ([celles de journal.openedition.org](https://amubox.univ-amu.fr/s/WsGHWw7xnq9zK8K) par exemple), ainsi que le fichier `robots.txt` du site ([celui de journal.openedition.org](https://journals.openedition.org/robots.txt) par exemple). Notez les règles pertinentes. N'effectuez aucun moissonnage massif à cette étape.
 
 ### Ce qu'il faut consigner dans `exemples_preliminaires.md`
 
