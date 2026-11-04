@@ -359,7 +359,7 @@ En équipe, convenez d’une personne responsable du fichier pendant la séance.
 
 ## 8. Accéder aux données Drive depuis Colab
 
-Un notebook ouvert depuis GitHub n’emporte pas les fichiers de données du projet. Pour accéder aux fichiers Drive autorisés, adaptez ce guide de démarrage : [Démarrage — notebook du cours](https://github.com/FrancisLa/Langues_de_specialite/blob/main/docs/demarrage.ipynb).
+Un notebook ouvert depuis GitHub n’emporte pas les fichiers de données du projet. Pour accéder aux fichiers Drive autorisés, adaptez ce guide de démarrage : [Démarrage — notebook du cours](https://github.com/FrancisLa/Langues_de_specialite/blob/main/docs/guides/demarrage.ipynb).
 
 
 La définition des chemins ne crée pas les dossiers. Vérifiez leur présence et suivez les consignes de l’activité pour les entrées et les sorties.
