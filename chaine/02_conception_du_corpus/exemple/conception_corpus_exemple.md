@@ -86,7 +86,7 @@ L'article entier pour l'inventaire, la comparaison entre numéros et la comparai
 
 ### Taille visée
 
-Environ 37 numéros et 457 articles d'après le notebook de démonstration. À recompter lors de la collecte.
+Environ 37 numéros et 457 articles. À recompter lors de la collecte.
 
 ### Justification de la taille
 
@@ -210,9 +210,7 @@ La revue ne peut pas être équilibrée : le nombre d'articles par numéro dépe
 
 ---
 
-## Partie G — `plan_metadonnees.md`
-
-Les champs de l'inventaire s'appuient sur la structure du notebook de moissonnage de démonstration.
+## Partie G — `plan_metadonnees.md` (provisoire)
 
 | Champ | Description | Nécessaire ? |
 |---|---|:---:|
@@ -313,7 +311,7 @@ Les articles d'un seul numéro, par exemple le premier numéro de l'inventaire d
 
 ### Ressources temporelles
 
-Estimation de la durée de collecte, avec un délai de 3 secondes entre requêtes comme dans le notebook de démonstration, pour 37 pages de numéros et 457 articles en HTML et PDF :
+Estimation de la durée de collecte, avec un délai de 3 secondes entre requêtes, pour 37 pages de numéros et 457 articles en HTML et PDF :
 
 \[ (37 + 457 + 457) \times 3 \text{ s} \approx 2\,853 \text{ s} \approx 48 \text{ min} \]
 
