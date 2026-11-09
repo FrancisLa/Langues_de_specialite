@@ -1,847 +1,383 @@
 # Acquisition des données
 
-Ce dossier documente l’acquisition des documents et métadonnées qui
-composeront le corpus.
+Ce dossier documente la récupération effective des documents et métadonnées nécessaires à l’enquête.
 
-L’acquisition est l’étape où le plan de corpus devient un ensemble de
-données effectivement disponibles pour l’enquête.
+L’étape `02_conception_du_corpus/` précise **quels documents viser et pourquoi**. L’acquisition explique **comment les obtenir, ce qui a effectivement été récupéré et comment le vérifier**.
 
 ```text
-plan de corpus
+plan de corpus et critères définis à l’étape 02
     ↓
-sources retenues
+choix et configuration de la procédure d’acquisition
     ↓
-acquisition des documents et métadonnées
+test sur un corpus pilote
     ↓
-inventaire des documents obtenus
+récupération des documents et métadonnées
     ↓
-contrôle initial
+inventaire, échecs et exclusions documentés
     ↓
-données sources prêtes pour la préparation
+contrôle des fichiers sources
+    ↓
+passage à la préparation
 ```
 
-L’objectif est de répondre aux questions suivantes :
+Les questions centrales sont :
 
-> **Comment les documents et métadonnées ont-ils été obtenus ?**
+- Comment les documents et métadonnées ont-ils été obtenus ?
+- Quelles versions des procédures, quels paramètres et quelles conditions d’accès ont été utilisés ?
+- Quels documents ont été récupérés, exclus ou laissés inaccessibles ?
+- Quelles traces permettent de vérifier la provenance et de reprendre la collecte ?
 
-> **De quelles sources proviennent-ils, à quelle date et selon quelles conditions ?**
+> L’acquisition ne redéfinit pas le corpus : elle met le plan à l’épreuve. Si elle impose de modifier une source, un critère ou le périmètre, le plan de corpus est révisé et la décision est justifiée dans le journal de recherche.
 
-> **Quels documents prévus ont effectivement été récupérés, lesquels ont été exclus et lesquels sont restés inaccessibles ?**
+## 1. Réutiliser les décisions de conception
 
-> **Quelles traces permettent de vérifier la provenance des données ?**
+Les documents suivants font référence. Ne recopiez pas leur contenu dans ce dossier :
 
-> **Principe :** l’acquisition ne consiste pas seulement à télécharger
-> des fichiers. Elle doit préserver la provenance, les conditions d’accès,
-> l’identification des documents et les décisions ayant conduit à leur
-> inclusion ou exclusion.
+| Document de l’étape 02 | Utilisation pendant l’acquisition |
+|---|---|
+| `../02_conception_du_corpus/plan_corpus.md` | Périmètre, population documentaire, langues, périodes et unités |
+| `../02_conception_du_corpus/protocole_selection.md` | Repérage et sélection des documents |
+| `../02_conception_du_corpus/criteres_inclusion_exclusion.md` | Décisions d’éligibilité |
+| `../02_conception_du_corpus/sources_candidates.csv` | Répertoire de référence des sources et de leurs identifiants |
+| `../02_conception_du_corpus/plan_echantillonnage.md` | Sélection exhaustive ou échantillonnage prévu |
+| `../02_conception_du_corpus/plan_metadonnees.md` | Informations recherchées et premiers repères dans les pages |
 
----
+Les noms, adresses principales et descriptions des sources sont maintenus dans `sources_candidates.csv`. Les vérifications et opérations effectivement réalisées sont consignées ici, avec les mêmes `id_source`.
 
-## Relation avec les autres étapes
+Lors d’une révision importante, indiquez dans le protocole la version du plan appliquée : date, numéro de version ou identifiant du commit.
 
-Cette étape met en œuvre les décisions prises dans :
-
-```text
-../01_question_et_cadre/
-../02_conception_du_corpus/
-```
-
-Elle fournit les données sources nécessaires à :
-
-```text
-../04_preparation/
-```
-
-Les documents et métadonnées effectivement acquis sont inventoriés dans :
-
-```text
-../../donnees/inventaire.csv
-../../donnees/exclusions.csv
-../../donnees/dictionnaire_metadonnees.md
-```
-
-Les décisions, difficultés et révisions importantes sont consignées dans :
-
-```text
-../../journal/journal_de_bord.md
-```
-
----
-
-## Structure du dossier
+## 2. Organisation du dossier
 
 ```text
 03_acquisition/
 ├── README.md
 ├── protocole_acquisition.md
 ├── journal_acquisition.csv
-├── sources_consultees.csv
+├── acces_sources.csv
 ├── code/
-│   ├── README.md
-│   ├── telecharger_documents.py
-│   ├── extraire_metadonnees.py
-│   └── verifier_telechargements.py
+│   └── [script ou notebook effectivement utilisé]
 ├── controles/
-│   ├── README.md
-│   ├── controle_acquisition.md
-│   └── controle_echantillon.csv
+│   └── controle_acquisition.md
 └── logs/
-    ├── README.md
-    └── acquisition_YYYY-MM-DD.log
+    └── [journaux techniques, si nécessaires]
 ```
 
-| Élément | Fonction | Versionné dans Git ? |
-|---|---|:---:|
-| `README.md` | Explique l’étape d’acquisition | Oui |
-| `protocole_acquisition.md` | Décrit les sources, procédures et conditions d’accès | Oui |
-| `journal_acquisition.csv` | Consigne les exécutions ou sessions de collecte | Oui |
-| `sources_consultees.csv` | Recense les sources consultées et leur statut | Oui |
-| `code/` | Scripts d’acquisition ou d’extraction de métadonnées | Oui |
-| `controles/` | Vérifications et contrôles d’un échantillon | Oui |
-| `logs/` | Journaux techniques de collecte | Selon leur taille et sensibilité |
-| Documents sources | Données brutes acquises | Selon les droits et la taille |
+Cette structure est indicative. Créez seulement les fichiers utiles à votre projet. Un protocole manuel explicite est recevable ; les scripts et notebooks ne sont pas obligatoires pour toutes les enquêtes.
 
-Les documents sources eux-mêmes sont généralement stockés dans :
+| Élément | Fonction |
+|---|---|
+| `protocole_acquisition.md` | Explique comment effectuer et reprendre la collecte |
+| `acces_sources.csv` | Conserve les vérifications pratiques des conditions d’accès |
+| `journal_acquisition.csv` | Résume les sessions de collecte et leurs résultats |
+| `code/` | Contient le script ou notebook utilisé, s’il y en a un |
+| `controles/controle_acquisition.md` | Décrit le contrôle des fichiers effectivement acquis |
+| `logs/` | Conserve les événements détaillés produits par le programme, si utiles |
+
+Les fichiers partagés dans Git doivent être inspectés avant l’envoi : aucun secret, contenu non partageable ou renseignement personnel inutile ne doit y figurer. Les journaux techniques peuvent rester hors de Git selon leur contenu, leur taille et les règles du projet. Vérifiez les règles de `.gitignore`, notamment pour les fichiers `.log`.
+
+### Emplacements communs au projet
 
 ```text
-../../donnees/sources/
+donnees/sources/                       fichiers sources non modifiés
+donnees/inventaire.csv                 registre des documents repérés
+donnees/exclusions.csv                 précisions sur les exclusions, si nécessaires
+donnees/dictionnaire_metadonnees.md    définition des champs et valeurs
+journal/journal_de_bord.md             décisions et justifications
 ```
 
-Ce dossier est souvent exclu de Git avec `.gitignore`, notamment lorsque
-les documents sont volumineux, sous droits, soumis à abonnement ou non
-redistribuables.
+Ces chemins partent de la racine du projet. Depuis ce dossier, on y accède avec `../../donnees/` et `../../journal/`.
 
----
+Les données sources sont conservées dans un espace autorisé et ne sont pas automatiquement déposées dans Git. Le projet indique leur emplacement et les modalités d’accès ou de vérification permises.
 
-# 1. Modes d’acquisition
+## 3. Choisir une procédure d’acquisition
 
-Les documents peuvent être obtenus de différentes manières.
+| Mode | Ce qu’il faut documenter |
+|---|---|
+| Collecte manuelle | Parcours suivi, adresses, dates, fichiers enregistrés et personne responsable |
+| Export | Requête, filtres, date, format et éventuelles limites de l’export |
+| API | Documentation, paramètres, pagination, quotas et version de l’interface si disponible |
+| Moissonnage | Page de départ, parcours, règles vérifiées, identification du programme, temporisation et gestion des erreurs |
+| Corpus existant | Version ou édition, provenance, licence, fichiers récupérés et modalités d’accès |
+| Numérisation ou enregistrement | Origine des documents, dispositif, format et conditions d’acquisition |
 
-| Mode | Description | Exemple | Documentation requise |
-|---|---|---|---|
-| Collecte manuelle | Téléchargement ou copie contrôlée par une personne | Télécharger un rapport institutionnel | Date, URL, personne, statut |
-| Export | Téléchargement structuré depuis une plateforme | Export CSV depuis une base | Requête, filtres, date, format |
-| API | Récupération automatisée via une interface de programmation | Requête vers une base bibliographique | Endpoint, paramètres, date, code |
-| Moissonnage | Collecte automatisée de pages accessibles | Extraction de pages institutionnelles | URL de départ, règles, code, rythme |
-| Corpus existant | Réutilisation d’un corpus déjà constitué | Corpus ouvert documenté | Version, licence, provenance |
-| Numérisation | Transformation de documents physiques ou images | OCR de documents numérisés | Source, outil, paramètres, qualité |
-| Transcription | Création de texte à partir d’audio, vidéo ou image | Transcription d’entretiens | Procédure, outil, révision, droits |
+Privilégiez une API ou un export documenté lorsque cette voie répond aux besoins et est autorisée. Le moissonnage n’est pas obligatoire.
 
-Le choix du mode dépend :
+L’OCR, la transcription, l’extraction du texte des HTML ou PDF et le nettoyage relèvent normalement de `04_preparation/`. Si une source fournit directement un texte transcrit ou un export textuel, conservez ce fichier comme source reçue et documentez sa provenance.
 
-- de la question de recherche ;
-- des conditions d’accès ;
-- des droits de réutilisation ;
-- de la structure des données disponibles ;
-- du volume de documents ;
-- des métadonnées nécessaires ;
-- des ressources techniques et temporelles du projet.
+## 4. Vérifier les conditions pratiques d’accès
 
-> Une méthode techniquement possible n’est pas nécessairement autorisée,
-> appropriée ou proportionnée au projet.
+Avant le pilote puis avant la collecte complète, consultez les conditions applicables : accès, licence, téléchargement, réutilisation, redistribution, quotas et transmission éventuelle à un service externe. Enregistrez la date et un lien vers les informations consultées.
 
----
+Pour le Web automatisé, examinez aussi le fichier `robots.txt` à la racine du domaine lorsque pertinent. Ce fichier indique les règles destinées aux agents automatisés ; il ne remplace pas une autorisation d’accès ni les droits de réutilisation.
 
-# 2. Protocole d’acquisition
+### Règles du cours
 
-Le fichier principal de cette étape est :
+- Ne contournez pas les restrictions techniques ou les conditions d’accès.
+- Si les règles du site interdisent le parcours automatisé, n’effectuez pas ce parcours sans autorisation explicite appropriée.
+- L’absence de `robots.txt` n’équivaut pas à une autorisation.
+- Un résultat technique autorisant le parcours ne prouve pas que les contenus sont redistribuables.
+- La collecte manuelle n’exonère pas du respect des droits et conditions.
+- En cas de doute, demandez une clarification à l’enseignant, utilisez une autre voie autorisée ou réduisez le corpus. Ne lancez pas une collecte pour tester les limites du site.
 
-```text
-protocole_acquisition.md
+### `acces_sources.csv`
+
+Ce fichier complète le répertoire des sources de l’étape 02 : il ne le remplace pas. Il peut contenir plusieurs vérifications datées pour une même source.
+
+```csv
+id_source;date_verification;mode_acquisition;reference_conditions;conclusion_conditions;robots_examen;conclusion_parcours;limites_techniques;responsable;commentaire
+S001;YYYY-MM-DD;moissonnage;URL_DES_CONDITIONS;a_verifier;a_verifier;a_verifier;a_verifier;Nom;Collecte non lancée
 ```
 
-## Gabarit
+- `conclusion_conditions` : résumé des conditions applicables ou `a_verifier` ; distinguer collecte et redistribution.
+- `robots_examen` : `consulte`, `absent`, `inaccessible`, `a_verifier` ou `non_applicable`.
+- `conclusion_parcours` : `compatible_avec_regles_consultees`, `interdit`, `incertain` ou `non_applicable` ; préciser dans le commentaire l’agent et les chemins examinés.
+- `limites_techniques` : temporisation, quota ou autre contrainte effectivement retenue.
+
+N’indiquez une vérification comme réalisée que si vous l’avez effectuée. Ne déposez aucun identifiant de connexion dans ce tableau.
+
+## 5. Décrire le protocole d’acquisition
+
+Le fichier principal est `protocole_acquisition.md`. Utilisez le gabarit suivant en supprimant les rubriques non pertinentes.
 
 ```markdown
 # Protocole d’acquisition
 
-## Version
+## Version et responsables
 
 - Version du protocole : [v0.1]
 - Date : [YYYY-MM-DD]
-- Personnes responsables : [Nom(s)]
+- Responsables : [noms]
+- Version du plan de corpus appliquée : [date, version ou commit]
 
-## Objectif
+## Entrées
 
-[Décrire les documents et métadonnées à acquérir.]
+- Plan : [lien vers ../02_conception_du_corpus/plan_corpus.md]
+- Critères : [lien vers les critères d’inclusion et d’exclusion]
+- Sources utilisées : [id_source du registre des sources de l’étape 02]
+- Métadonnées prévues : [lien vers plan_metadonnees.md]
 
-## Relation avec la question de recherche
+## Mode et paramètres
 
-[Expliquer pourquoi ces sources et documents sont nécessaires.]
+- Mode d’acquisition : [manuel, export, API, moissonnage, corpus existant]
+- Point de départ : [adresse, requête ou référence]
+- Paramètres : [filtres, pagination, périmètre technique]
+- Conditions vérifiées : [renvoi à acces_sources.csv]
+- Code ou outil : [chemin et version, si applicable]
+- Environnement requis : [renvoi vers environnement/]
 
-## Sources retenues
+## Procédure reproductible
 
-| ID source | Nom | Type | URL ou référence | Mode d’accès | Statut |
-|---|---|---|---|---|---|
-| S001 | [Nom] | [Base / site / archive] | [URL] | [Ouvert / institutionnel] | [Retenue] |
-| S002 | [Nom] | [Base / site / archive] | [URL] | [Ouvert / institutionnel] | [Retenue] |
+1. [Ouvrir la source ou lancer la requête prévue.]
+2. [Repérer les documents selon le protocole de sélection de l’étape 02.]
+3. [Appliquer les critères, sans les redéfinir ici.]
+4. [Attribuer ou retrouver l’identifiant stable.]
+5. [Récupérer les documents et les métadonnées accessibles.]
+6. [Enregistrer les fichiers sources sans les modifier.]
+7. [Mettre à jour inventaire.csv et le journal d’acquisition.]
+8. [Effectuer le contrôle initial.]
 
-## Documents recherchés
+## Erreurs et reprise
 
-[Décrire les documents attendus selon le plan de corpus.]
+[Comment sont signalés les échecs ? Que sauvegarde-t-on ?
+Comment reprendre sans tout télécharger de nouveau ?]
 
-## Métadonnées à collecter
+## Sorties et stockage
 
-- Identifiant stable ;
-- Titre ;
-- Source ;
-- URL ou référence ;
-- Date de publication ;
-- Date de collecte ;
-- Langue ;
-- Genre ;
-- Producteur ou institution ;
-- Sous-corpus ;
-- Conditions d’accès ;
-- Relation avec un autre document, si pertinente.
+[Emplacement des fichiers sources, inventaire, dictionnaire,
+rapport de contrôle et journaux. Distinguer stockage local et Git.]
 
-## Procédure
+## Bilan et écarts au plan
 
-### Étape 1 — Recherche ou repérage
+[Documents prévus, récupérés, exclus ou inaccessibles ; champs manquants ;
+limites. Renvoyer aux traces plutôt que recopier tous les tableaux.]
 
-[Décrire la requête, les filtres, mots-clés, catégories ou pages de départ.]
+## Révisions nécessaires
 
-### Étape 2 — Vérification de l’éligibilité
-
-[Décrire comment les critères d’inclusion et d’exclusion sont appliqués.]
-
-### Étape 3 — Acquisition
-
-[Décrire le téléchargement, export, API, moissonnage ou autre procédure.]
-
-### Étape 4 — Attribution d’un identifiant
-
-[Décrire le format des identifiants, par exemple `D0001`, `D0002`, etc.]
-
-### Étape 5 — Enregistrement des métadonnées
-
-[Décrire comment `inventaire.csv` est complété.]
-
-### Étape 6 — Contrôle initial
-
-[Décrire les vérifications : fichiers présents, encodage, format,
-doublons, métadonnées, taille, relation entre documents.]
-
-## Fichiers produits
-
-| Fichier | Emplacement | Description |
-|---|---|---|
-| Documents sources | `donnees/sources/` | Fichiers bruts acquis |
-| Inventaire | `donnees/inventaire.csv` | Registre des documents |
-| Exclusions | `donnees/exclusions.csv` | Documents non retenus |
-| Journal technique | `chaine/03_acquisition/logs/` | Traces automatisées, si pertinent |
-| Journal de recherche | `journal/journal_de_bord.md` | Décisions méthodologiques |
-
-## Limites connues
-
-[Décrire les documents manquants, sources restreintes, métadonnées
-incomplètes, erreurs de téléchargement ou limites de couverture.]
+[Liens vers les modifications du plan et les décisions du journal.]
 ```
 
----
+### Précisions pour le moissonnage et les API
 
-# 3. Sources et conditions d’accès
+Selon le cas, indiquez :
 
-Les sources retenues doivent être documentées dans :
+- l’identification du programme et les pages ou chemins visés ;
+- la temporisation ou les quotas ;
+- la pagination et les limites de résultats ;
+- les délais d’attente, les conditions d’arrêt et la gestion des échecs ;
+- le contrôle du format reçu : une réponse réussie peut être une page d’erreur ou de connexion plutôt que le document attendu ;
+- la sauvegarde des résultats et le mécanisme de reprise.
 
-```text
-sources_consultees.csv
-```
+Ne déposez jamais les clés d’API, jetons ou mots de passe dans Git. Utilisez un fichier local ignoré ou un dispositif de secrets adapté. Si vous utilisez `.env` ou une configuration privée, vérifiez leur exclusion dans `.gitignore`. Un fichier d’exemple partageable ne contient que les noms de paramètres et des valeurs fictives ou vides.
 
-## Structure recommandée
+## 6. Réaliser le pilote avant la collecte complète
 
-```csv
-id_source;nom;type_source;url;date_consultation;mode_acces;conditions_utilisation;robots_verifie;mode_acquisition;statut;responsable;commentaire
-S001;Nom de la source;base_de_donnees;[https://exemple.org;YYYY-MM-DD;ouvert;a_verifier;non_applicable;export_csv;retenue;Nom;Source](https://exemple.org;YYYY-MM-DD;ouvert;a_verifier;non_applicable;export_csv;retenue;Nom;Source) principale
-S002;Nom de la source;site_institutionnel;[https://exemple.org;YYYY-MM-DD;ouvert;a_verifier;oui;telechargement_manuel;retenue;Nom;Communiques](https://exemple.org;YYYY-MM-DD;ouvert;a_verifier;oui;telechargement_manuel;retenue;Nom;Communiques)
-S003;Nom de la source;site_web;[https://exemple.org;YYYY-MM-DD;restreint;non_autorise;oui;non_effectue;ecartee;Nom;Acces](https://exemple.org;YYYY-MM-DD;restreint;non_autorise;oui;non_effectue;ecartee;Nom;Acces) insuffisant
-```
+Le pilote teste la procédure sur un petit ensemble choisi pour révéler les difficultés : structure des pages, accès, formats et disponibilité des métadonnées. Il ne démontre pas à lui seul que le corpus final sera complet ou représentatif.
 
-## Champs recommandés
+Dans le parcours du cours, `corpus_pilote.md` et `evaluation_faisabilite.md` ont été laissés en attente à la séance de conception. Ils sont renseignés progressivement à partir des démonstrations et essais d’acquisition et de préparation.
 
-| Colonne | Description |
-|---|---|
-| `id_source` | Identifiant stable de la source |
-| `nom` | Nom de la plateforme, institution ou base |
-| `type_source` | Base, site, archive, API, export, collection, etc. |
-| `url` | URL de la source ou de la documentation |
-| `date_consultation` | Date de consultation au format `YYYY-MM-DD` |
-| `mode_acces` | Ouvert, institutionnel, restreint, manuel, API, etc. |
-| `conditions_utilisation` | Licence, conditions, restrictions ou statut à vérifier |
-| `robots_verifie` | Oui, non, non applicable ou inconnu |
-| `mode_acquisition` | Téléchargement, API, export, moissonnage, etc. |
-| `statut` | Candidate, retenue, écartée, inaccessible, à vérifier |
-| `responsable` | Personne ayant vérifié ou acquis la source |
-| `commentaire` | Remarques, problèmes ou justifications |
+Pour éviter de multiplier les comptes rendus :
 
----
+- décrivez le pilote dans `../02_conception_du_corpus/corpus_pilote.md` ;
+- consignez ici les exécutions et leurs résultats dans `journal_acquisition.csv` ;
+- mettez à jour `../02_conception_du_corpus/evaluation_faisabilite.md` à partir des constats ;
+- réservez le contrôle détaillé de l’extraction du texte aux opérations correspondantes de `04_preparation/`.
 
-# 4. Conditions d’utilisation, robots.txt et autorisation
+Si le pilote impose un changement, mettez à jour le plan ou les critères avant de poursuivre. Ne présentez pas une collecte complète comme validée tant que des conditions essentielles restent non vérifiées.
 
-Avant toute acquisition, vérifier :
+## 7. Identifier les documents et tenir l’inventaire
 
-- les conditions d’utilisation de la source ;
-- les licences applicables ;
-- les conditions d’accès institutionnel ;
-- les restrictions de téléchargement ou de redistribution ;
-- la présence de données personnelles ;
-- les règles propres aux API ;
-- les limitations de fréquence ;
-- les modalités de citation ou d’attribution ;
-- la possibilité de transmettre ou non les données à des services externes.
+### Identifiants stables
 
-## Robots Exclusion Protocol
-
-Lorsqu’un projet utilise une collecte automatisée sur le Web, le fichier :
-
-```text
-https://[domaine]/robots.txt
-```
-
-doit être examiné et documenté, lorsque pertinent.
-
-Le protocole `robots.txt` indique les chemins qu’un opérateur de site
-demande aux agents automatisés d’éviter ou peut autoriser à parcourir.
-Cependant, il ne constitue pas une autorisation juridique d’accès,
-d’extraction, de réutilisation ou de redistribution des contenus. Le RFC
-9309 précise explicitement que ces règles ne constituent pas une forme
-d’autorisation d’accès. [338]
-
-Par conséquent :
-
-| Situation | Interprétation |
-|---|---|
-| `robots.txt` autorise un chemin | Cela ne garantit pas que les données peuvent être réutilisées ou redistribuées |
-| `robots.txt` interdit un chemin | Ne pas collecter automatiquement sans autorisation explicite ou procédure institutionnelle appropriée |
-| Aucun fichier `robots.txt` | Cela ne constitue pas une autorisation implicite |
-| Site public | L’accès public ne garantit pas les droits de réutilisation |
-| Accès institutionnel | L’accès par abonnement ne garantit pas le droit de redistribuer les documents |
-
-## Règle du cours
-
-En cas de doute :
-
-1. privilégier une API, un export ou une source ouverte ;
-2. privilégier la collecte manuelle d’un corpus réduit ;
-3. demander une autorisation ou consulter la documentation institutionnelle ;
-4. ne pas contourner les restrictions techniques ;
-5. ne pas utiliser de compte, clé, identifiant ou jeton dans le code versionné ;
-6. documenter la limitation dans le journal ;
-7. réduire ou modifier le corpus si nécessaire.
-
----
-
-# 5. Journal d’acquisition
-
-Le journal technique de collecte est distinct du journal de recherche.
-
-```text
-journal_acquisition.csv
-```
-
-consigne les opérations de récupération, notamment lorsqu’elles sont
-répétables ou automatisées.
-
-## Structure recommandée
-
-```csv
-date_heure;id_source;operation;requete_ou_page_depart;nombre_repere;nombre_telecharge;nombre_echec;sortie;version_code;responsable;commentaire
-YYYY-MM-DDTHH:MM:SS;S001;export;requete_exemple;100;95;5;donnees/sources/export_YYYY-MM-DD.csv;abc123;Nom;Cinq documents inaccessibles
-```
-
-| Colonne | Description |
-|---|---|
-| `date_heure` | Date et heure de l’opération |
-| `id_source` | Source concernée |
-| `operation` | Export, téléchargement, API, moissonnage, vérification, etc. |
-| `requete_ou_page_depart` | Requête, URL de départ ou description de l’action |
-| `nombre_repere` | Nombre de documents identifiés |
-| `nombre_telecharge` | Nombre de documents récupérés |
-| `nombre_echec` | Nombre d’échecs rencontrés |
-| `sortie` | Fichier ou dossier produit |
-| `version_code` | Hash de commit ou version du script |
-| `responsable` | Personne ou système ayant exécuté l’opération |
-| `commentaire` | Détails nécessaires à l’interprétation |
-
-> Le journal technique décrit les opérations.  
-> Le journal de recherche explique les raisons méthodologiques des choix,
-> difficultés ou révisions importantes.
-
----
-
-# 6. Attribution d’identifiants
-
-Chaque document acquis doit recevoir un identifiant stable.
-
-## Format recommandé
+Chaque document repéré doit pouvoir être suivi indépendamment de son statut ou de ses différents fichiers. Utilisez un identifiant stable issu de la source ou défini par le projet, par exemple :
 
 ```text
 D0001
 D0002
-D0003
 ```
 
-Pour des paires documentaires :
+Pour un identifiant issu d’une plateforme, ajoutez un préfixe de source si nécessaire afin d’éviter les collisions. Ne réattribuez pas les identifiants à chaque reprise de collecte.
+
+Les versions HTML et PDF d’un même article partagent l’identifiant du document : elles ne constituent pas deux articles.
 
 ```text
-P0001
-P0002
-```
-
-Exemple :
-
-| `id_document` | `id_paire` | Genre | Description |
-|---|---|---|---|
-| `D0001` | `P0001` | Article | Article scientifique |
-| `D0002` | `P0001` | Communiqué | Communiqué associé |
-| `D0003` | `P0002` | Article | Deuxième article scientifique |
-| `D0004` | `P0002` | Communiqué | Deuxième communiqué associé |
-
-Les identifiants doivent être attribués au moment de l’acquisition ou
-aussitôt après. Ils ne doivent pas changer après le début de la
-préparation et de l’analyse.
-
-## Nom de fichier suggéré
-
-```text
-D0001_source.pdf
 D0001_source.html
-D0001_source.xml
-D0001_metadonnees.json
-D0002_source.html
+D0001_source.pdf
 ```
 
-Après préparation :
+Si la question exige des paires de documents, ajoutez un `id_paire`. Sinon, ce champ n’est pas nécessaire.
 
-```text
-D0001_prepare.txt
-D0001_segments.csv
-D0001_annote.csv
-```
+### Inventaire commun
 
-> Ne pas utiliser le titre intégral du document comme seul nom de fichier :
-> il peut être long, contenir des caractères spéciaux, varier dans le
-> temps ou révéler inutilement des informations.
+Le registre de référence est `../../donnees/inventaire.csv`. La structure exacte et le sens des champs sont documentés dans `../../donnees/dictionnaire_metadonnees.md`.
 
----
+Ne recopiez pas la liste des documents dans plusieurs fichiers. Si un registre d’exclusions distinct est utile, reliez-le à l’inventaire par `id_document`.
 
-# 7. Inventaire des documents
-
-L’inventaire principal est stocké dans :
-
-```text
-../../donnees/inventaire.csv
-```
-
-Chaque document repéré doit recevoir un statut.
-
-| Statut | Signification |
-|---|---|
-| `retenu` | Document intégré au corpus |
-| `a_verifier` | Document nécessitant une vérification |
-| `exclu` | Document écarté selon un critère documenté |
-| `doublon` | Document dupliquant une autre version |
-| `inaccessible` | Document non récupéré ou non accessible |
-| `incomplet` | Document récupéré mais insuffisant pour l’analyse |
-| `hors_perimetre` | Document hors domaine, période, langue ou genre |
-| `non_redistribuable` | Document utilisable sous conditions, mais non partageable |
-| `pilote` | Document retenu seulement pour tester le protocole |
-
-Exemple :
+Exemple minimal de structure — en-tête à adapter :
 
 ```csv
-id_document;id_paire;id_source;titre;url;date_publication;date_collecte;langue;genre;statut;raison_statut;fichier_source;conditions_acces
-D0001;P0001;S001;Titre de l'article;[https://exemple.org/article;2024-01-15;2026-10-07;fr;article;retenu;respecte](https://exemple.org/article;2024-01-15;2026-10-07;fr;article;retenu;respecte) les criteres;D0001_source.pdf;ouvert
-D0002;P0001;S002;Titre du communique;[https://exemple.org/communique;2024-02-02;2026-10-07;fr;communique;retenu;paire](https://exemple.org/communique;2024-02-02;2026-10-07;fr;communique;retenu;paire) documentee;D0002_source.html;ouvert
-D0003;;S001;Titre d'un document;[https://exemple.org/document;2023-01-01;2026-10-07;en;article;exclu;langue](https://exemple.org/document;2023-01-01;2026-10-07;en;article;exclu;langue) hors perimetre;D0003_source.pdf;ouvert
+id_document;id_source;url;date_collecte;fichier_source;statut_selection;raison_selection;statut_acquisition;conditions_acces;redistribution
 ```
 
-Les exclusions importantes doivent être détaillées dans :
+Les colonnes analytiques prévues à l’étape 02 (titre, langue, numéro, date de publication, genre, etc.) sont ajoutées selon les besoins et les informations effectivement disponibles.
 
-```text
-../../donnees/exclusions.csv
-```
+### Distinguer les dimensions de statut
 
----
+Un document peut être sélectionné, téléchargé, mais non redistribuable. Une seule colonne `statut` ne rend pas ces dimensions clairement. Vous pouvez donc les séparer :
 
-# 8. Acquisition manuelle
-
-Une collecte manuelle peut être méthodologiquement préférable lorsqu’un
-corpus est petit, lorsqu’un accès automatisé est inapproprié, ou lorsque
-la relation entre documents exige une vérification interprétative.
-
-## Procédure minimale
-
-```markdown
-1. Ouvrir la source documentée.
-2. Vérifier que le document répond aux critères.
-3. Vérifier les conditions d’accès et de réutilisation.
-4. Télécharger ou enregistrer le document, si autorisé.
-5. Attribuer un identifiant stable.
-6. Enregistrer le fichier dans `donnees/sources/`.
-7. Ajouter les métadonnées à `donnees/inventaire.csv`.
-8. Consigner les exclusions ou ambiguïtés.
-9. Vérifier que le fichier est lisible et non vide.
-```
-
-## Informations à enregistrer
-
-- URL ou référence complète ;
-- date de consultation ;
-- date de téléchargement ;
-- nom de fichier ;
-- format du document ;
-- taille approximative ;
-- statut d’accès ;
-- relation avec d’autres documents ;
-- personne responsable ;
-- difficultés rencontrées.
-
----
-
-# 9. Acquisition par API ou export
-
-Lorsqu’une API ou une fonction d’export est disponible, elle doit être
-privilégiée par rapport à une extraction non structurée, si elle répond
-aux besoins du projet.
-
-## Documentation minimale
-
-```markdown
-## API ou export utilisé
-
-### Source
-
-[Nom de la plateforme.]
-
-### Documentation
-
-[URL de la documentation officielle.]
-
-### Date d’accès
-
-[YYYY-MM-DD]
-
-### Requête ou paramètres
-
-[Décrire les filtres, période, langue, genres, pages ou limites.]
-
-### Pagination ou limites
-
-[Décrire la gestion des résultats multiples.]
-
-### Champs récupérés
-
-[Décrire les métadonnées et contenus récupérés.]
-
-### Fichier de sortie
-
-[Indiquer le fichier ou dossier produit.]
-
-### Conditions d’utilisation
-
-[Décrire les limites de l’API, licences, quotas et restrictions.]
-
-### Reproduction
-
-[Indiquer le script, les variables d’environnement nécessaires et la
-commande d’exécution.]
-```
-
-## Secrets et clés d’API
-
-Les clés, jetons et mots de passe ne doivent jamais être déposés dans Git.
-
-Utiliser :
-
-```text
-.env
-configuration/config.yml
-```
-
-Ces fichiers doivent être ignorés par Git.
-
-Conserver plutôt :
-
-```text
-configuration/.env.example
-configuration/config.example.yml
-```
-
-Exemple :
-
-```bash
-# .env.example
-API_KEY=
-API_TOKEN=
-```
-
----
-
-# 10. Acquisition par moissonnage
-
-Le moissonnage doit être utilisé seulement lorsqu’il est :
-
-- nécessaire ;
-- autorisé ;
-- proportionné ;
-- documenté ;
-- techniquement respectueux de la source ;
-- compatible avec les règles du cours et de l’établissement.
-
-## Documentation minimale
-
-```markdown
-## Moissonnage
-
-### Domaine de départ
-
-[URL de départ.]
-
-### Pages ou chemins visés
-
-[Décrire les parties du site concernées.]
-
-### Pages ou chemins exclus
-
-[Décrire les exclusions.]
-
-### Agent utilisateur
-
-[Nom ou description de l’agent, si applicable.]
-
-### Rythme des requêtes
-
-[Décrire la temporisation ou la limite appliquée.]
-
-### Date de collecte
-
-[YYYY-MM-DD]
-
-### Nombre de pages visitées
-
-[n]
-
-### Nombre de documents retenus
-
-[n]
-
-### Erreurs
-
-[Décrire les erreurs, redirections ou pages inaccessibles.]
-
-### Conditions d’utilisation
-
-[Décrire les règles vérifiées.]
-
-### Code
-
-[Chemin vers le script.]
-```
-
-## Bonnes pratiques minimales
-
-- Préférer les fichiers directement fournis au téléchargement.
-- Respecter les limites documentées des API.
-- Utiliser des requêtes espacées.
-- Éviter les collectes massives non nécessaires.
-- Conserver les URL et dates de collecte.
-- Ne pas contourner les pages nécessitant une authentification.
-- Ne pas tenter de contourner les restrictions d’accès.
-- Ne pas collecter de données personnelles non nécessaires.
-- Interrompre la collecte si le comportement de la source devient
-  incertain ou problématique.
-- Documenter les échecs et exclusions.
-
----
-
-# 11. Contrôle initial de l’acquisition
-
-Avant de préparer les textes, contrôler l’intégrité du corpus source.
-
-Le dossier correspondant est :
-
-```text
-controles/
-```
-
-## Vérifications minimales
-
-| Contrôle | Question | Exemple de procédure |
+| Dimension | Exemple de colonne | Valeurs possibles |
 |---|---|---|
-| Présence | Les fichiers attendus sont-ils présents ? | Comparer inventaire et dossier source |
-| Lisibilité | Les fichiers peuvent-ils être ouverts ? | Ouvrir ou lire un échantillon |
-| Taille | Des fichiers sont-ils vides ou anormalement petits ? | Vérifier taille et longueur du texte |
-| Doublons | Le même document est-il présent plusieurs fois ? | Comparer URL, titre, DOI ou hash |
-| Métadonnées | Les champs essentiels sont-ils présents ? | Contrôler l’inventaire |
-| Langue | Le document correspond-il à la langue prévue ? | Vérification manuelle ou automatique |
-| Genre | Le document correspond-il au genre déclaré ? | Vérification manuelle |
-| Appariement | Les documents d’une paire sont-ils réellement associés ? | Vérifier référence, DOI, titre ou lien |
-| Encodage | Les caractères sont-ils correctement récupérés ? | Vérifier accents et caractères spéciaux |
-| Droits | Le statut d’accès est-il enregistré ? | Vérifier la colonne `conditions_acces` |
+| Éligibilité | `statut_selection` | `retenu`, `exclu`, `a_verifier` |
+| Récupération | `statut_acquisition` | `non_tente`, `recupere`, `echec`, `inaccessible` |
+| Contrôle du fichier | `statut_controle` | `non_controle`, `conforme`, `incomplet`, `format_inattendu`, `a_verifier` |
+| Droit de partage | `redistribution` | `autorisee`, `non_autorisee`, `a_verifier` |
+| Usage | `role_corpus` | `pilote`, `principal` |
 
-## Gabarit de contrôle
+Ce tableau est un vocabulaire de départ, pas une obligation d’ajouter toutes les colonnes. Ne supprimez pas silencieusement les échecs, les doublons ou les exclusions : conservez une raison et, pour un doublon, le lien vers le document de référence.
+
+Distinguez aussi :
+
+- `date_publication` : date indiquée par la source ;
+- `date_collecte` : date de la récupération ;
+- les dates inconnues, sans leur substituer la date de consultation.
+
+## 8. Conserver les traces de collecte
+
+### `journal_acquisition.csv`
+
+Ce fichier résume les sessions d’acquisition. L’inventaire contient le détail par document ; il n’est pas recopié dans le journal des sessions.
+
+```csv
+id_session;date_heure;id_source;operation;point_depart;nombre_cibles;nombre_recupere;nombre_echec;sortie;version_code_ou_protocole;responsable;commentaire
+```
+
+Définissez l’unité des comptes dans le protocole : documents, pages ou fichiers. Ne mélangez pas, dans un même bilan, le nombre d’articles avec le nombre de fichiers HTML et PDF. Si nécessaire, ajoutez des colonnes distinctes.
+
+Pour une collecte manuelle, indiquez la version du protocole à la place de celle du code. Si une source doit être décrite en détail, utilisez son `id_source` plutôt que répéter son nom et son adresse dans tous les tableaux.
+
+### Journaux techniques détaillés
+
+Les programmes peuvent produire des traces plus fines : URL appelée, heure, format reçu, code de réponse, erreur ou nouvelle tentative. Ces traces complètent le bilan des sessions lorsqu’elles sont utiles. Elles ne sont pas obligatoires pour une petite collecte manuelle.
+
+### Journal de recherche
+
+`../../journal/journal_de_bord.md` explique les raisons des décisions, pas la succession de toutes les requêtes.
+
+Exemple construit :
+
+> La procédure repère un lien HTML et un lien PDF pour chaque article. Nous conservons un identifiant d’article unique et distinguons les deux fichiers dans l’inventaire. Cette décision évite de compter deux fois un même article. Nous vérifierons la correspondance sur un petit échantillon.
+
+Un changement de source, de période, de genre ou de critères est expliqué dans le journal et reporté dans le plan de corpus. Les usages substantiels d’outils d’assistance et leurs vérifications y sont également documentés.
+
+## 9. Contrôler l’acquisition avant la préparation
+
+Le contrôle initial porte sur les sources effectivement obtenues. Il est distinct :
+
+- du pilote, qui teste la procédure sur un petit ensemble avant extension ;
+- du contrôle d’extraction et de nettoyage, réalisé dans `04_preparation/`.
+
+| Contrôle | Question |
+|---|---|
+| Concordance | Les fichiers présents correspondent-ils aux entrées de l’inventaire ? |
+| Complétude de la collecte | Parmi les documents ciblés, lesquels ont été récupérés et lesquels manquent ? |
+| Format | Le fichier annoncé comme PDF ou HTML est-il bien dans ce format ? |
+| Intégrité | Le fichier est-il non vide et peut-il être ouvert ? |
+| Doublons | Deux URL ou deux fichiers désignent-ils le même document ? |
+| Métadonnées | Les champs essentiels ont-ils été obtenus ? Quelles valeurs restent inconnues ? |
+| Éligibilité | L’application des critères a-t-elle été respectée ? |
+| Provenance | Source, adresse, date de collecte, identifiant et fichier sont-ils reliés ? |
+| Stockage | Les originaux sont-ils conservés sans modification dans l’espace prévu ? |
+
+Pour les HTML et PDF, la présence d’un fichier ne garantit pas que le texte pourra être correctement extrait. Cette vérification sera approfondie pendant la préparation.
+
+### Rapport : `controles/controle_acquisition.md`
 
 ```markdown
 # Contrôle de l’acquisition
 
-## Date
+## Date et état contrôlé
 
-[YYYY-MM-DD]
+- Date : [YYYY-MM-DD]
+- Version du protocole ou du code : [version ou commit]
+- Version ou état de l’inventaire : [référence]
 
-## Version du corpus contrôlée
+## Périmètre du contrôle
 
-[Version ou identifiant.]
-
-## Taille de l’échantillon contrôlé
-
-[n] documents sur [N] documents.
+[Nombre de documents ou fichiers contrôlés, ensemble de référence,
+mode de choix de l’échantillon, formats et cas particuliers.]
 
 ## Vérifications
 
-| Élément | Procédure | Résultat | Action requise |
+| Contrôle | Procédure | Résultat observé | Action |
 |---|---|---|---|
-| Fichiers présents | [Procédure] | [Résultat] | [Action] |
-| Métadonnées | [Procédure] | [Résultat] | [Action] |
-| Doublons | [Procédure] | [Résultat] | [Action] |
-| Appariement | [Procédure] | [Résultat] | [Action] |
-| Encodage | [Procédure] | [Résultat] | [Action] |
+| [Contrôle] | [Comment vérifier] | [Constat réel] | [Action ou aucune] |
 
-## Problèmes détectés
+## Bilan
 
-[Décrire les problèmes.]
+[Échecs, fichiers manquants, doublons, métadonnées absentes.
+Renvoyer aux identifiants de l’inventaire.]
 
 ## Décision
 
-[Passer à la préparation / corriger / compléter / revoir la source.]
+[Passer à la préparation, compléter la collecte, corriger la procédure
+ou réviser le plan de corpus.]
 ```
 
----
+Ne remplacez pas un résultat non vérifié par une case cochée. Si un contrôle est reporté, indiquez-le et expliquez sa conséquence.
 
-# 12. Provenance et traçabilité
+## 10. Passage à la préparation
 
-La provenance comprend l’origine des données, leur mode d’acquisition,
-leur date, les personnes ou systèmes impliqués et les transformations
-subies.
+Avant de commencer `../04_preparation/`, vérifiez :
 
-Les métadonnées de provenance permettent de comprendre pourquoi et
-comment les données ont été produites, où et quand elles ont été
-collectées, et par qui. Elles contribuent à la vérification, à la
-réutilisation et à la reproductibilité des données de recherche.
-[340][341]
+- [ ] Le protocole renvoie au plan et aux critères de l’étape 02, sans les recopier.
+- [ ] Les conditions d’accès et les usages permis ont été examinés et datés.
+- [ ] Le pilote a été documenté, et les révisions nécessaires ont été apportées.
+- [ ] Les documents ont des identifiants stables ; les variantes HTML/PDF sont reliées.
+- [ ] L’inventaire décrit les documents obtenus, les échecs et les exclusions.
+- [ ] Les champs et valeurs de l’inventaire sont définis dans le dictionnaire.
+- [ ] Les sources reçues sont conservées sans modification, séparées des données préparées.
+- [ ] Un contrôle initial a été réalisé et les anomalies sont documentées.
+- [ ] La collecte peut être comprise et reprise à partir du protocole et des traces.
+- [ ] Aucun secret ou contenu non partageable n’est envoyé dans Git.
+- [ ] Les décisions importantes sont justifiées dans le journal de recherche.
 
-Pour chaque fichier source, conserver autant que possible :
-
-| Information | Exemple |
-|---|---|
-| Identifiant de document | `D0001` |
-| Source | Nom de l’institution ou de la base |
-| URL ou référence | URL stable, DOI ou référence complète |
-| Date de publication | `2024-01-15` |
-| Date de collecte | `2026-10-07` |
-| Mode d’acquisition | Export, téléchargement manuel, API, etc. |
-| Fichier source | `D0001_source.pdf` |
-| Format source | PDF, HTML, XML, CSV, JSON, TXT |
-| Conditions d’accès | Ouvert, institutionnel, restreint |
-| Version du script | Hash de commit ou tag |
-| Responsable | Personne ou système ayant effectué l’opération |
-| Transformations ultérieures | Liens vers les étapes de préparation |
-
-> La provenance doit être enregistrée pendant l’acquisition, et non
-> reconstituée uniquement à la fin du projet.
-
----
-
-# 13. Articulation avec les autres dossiers
-
-| Dossier | Rôle par rapport à l’acquisition |
-|---|---|
-| `01_question_et_cadre/` | Définit le phénomène et les observables à étudier |
-| `02_conception_du_corpus/` | Définit les sources, critères et comparaisons |
-| `04_preparation/` | Extrait, nettoie, segmente ou annote les données acquises |
-| `donnees/` | Conserve l’inventaire, les métadonnées et les fichiers sources |
-| `configuration/` | Contient les paramètres partageables de collecte |
-| `environnement/` | Décrit les logiciels nécessaires aux scripts d’acquisition |
-| `06_validation/` | Vérifie la qualité des données et de leur provenance |
-| `journal/` | Documente les décisions, problèmes et révisions |
-| `article/` | Présente l’acquisition et le corpus dans les Méthodes |
-
----
-
-# 14. Journal de recherche associé
-
-Les décisions méthodologiques importantes doivent être consignées dans :
-
-```text
-../../journal/journal_de_bord.md
-```
-
-Exemples de décisions à documenter :
-
-- changement de source ;
-- source inaccessible ;
-- modification de requête ;
-- réduction du corpus ;
-- exclusion d’un genre ;
-- difficulté d’appariement ;
-- changement de période ;
-- condition d’utilisation limitant la redistribution ;
-- décision de passer d’un moissonnage à une collecte manuelle ;
-- erreur de téléchargement ou métadonnée manquante ;
-- problème d’encodage ;
-- transmission ou non de données à un service externe.
-
-Exemple :
-
-```markdown
-## YYYY-MM-DD — Abandon d’une source automatisée
-
-### Observation
-
-La source envisagée ne fournit pas d’export structuré et ses conditions
-d’utilisation ne permettent pas clairement une collecte automatisée.
-
-### Options envisagées
-
-1. Mettre en place un moissonnage à grande échelle.
-2. Demander une autorisation ou un accès institutionnel.
-3. Utiliser une source ouverte alternative.
-4. Réduire le corpus à une collecte manuelle documentée.
-
-### Décision
-
-Nous retenons l’option 3.
-
-### Justification
-
-La source alternative fournit des métadonnées structurées et des
-conditions d’accès plus compatibles avec le projet. Elle permet de
-conserver la comparaison nécessaire à la question.
-
-### Conséquences
-
-La population documentaire est modifiée. Cette limite est ajoutée au
-plan de corpus et devra être discutée dans l’article.
-```
-
----
-
-# Checklist avant de passer à la préparation
-
-- [ ] Les sources retenues sont documentées.
-- [ ] Les conditions d’accès et de réutilisation ont été examinées.
-- [ ] Les documents acquis ont reçu des identifiants stables.
-- [ ] L’inventaire du corpus est à jour.
-- [ ] Les exclusions et documents inaccessibles sont documentés.
-- [ ] Les fichiers sources sont séparés des fichiers préparés.
-- [ ] Les documents sources ne sont pas modifiés directement.
-- [ ] Les métadonnées essentielles ont été récupérées.
-- [ ] Les doublons ont été contrôlés.
-- [ ] Les fichiers vides, illisibles ou incomplets ont été repérés.
-- [ ] Les relations entre documents appariés ont été vérifiées.
-- [ ] Les règles de stockage et de partage sont respectées.
-- [ ] Les secrets et données sensibles ne sont pas présents dans Git.
-- [ ] Les scripts ou protocoles d’acquisition sont documentés.
-- [ ] Un contrôle initial a été effectué.
-- [ ] Les problèmes importants sont consignés dans le journal.
-- [ ] Les données sont prêtes pour `04_preparation/`.
+Les traitements d’extraction, d’OCR, de nettoyage, de segmentation et d’annotation sont documentés dans les sous-dossiers pertinents de `04_preparation/`. La provenance des fichiers y est conservée à partir des identifiants définis ici.
