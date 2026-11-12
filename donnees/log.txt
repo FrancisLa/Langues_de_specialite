@@ -26,3 +26,31 @@
 2026-10-31 05:38:30.743255 - PDF : https://journals.openedition.org/aad/pdf/338
 2026-10-31 05:38:34.798434 - PDF : https://journals.openedition.org/aad/pdf/351
 2026-10-31 05:38:38.077318 - ERREUR PDF : https://journals.openedition.org/aad/200 - Le PDF téléchargé est vide
+2026-11-11 19:43:28.055021 - HTML : https://journals.openedition.org/aad/184
+2026-11-11 19:43:31.164946 - HTML : https://journals.openedition.org/aad/193
+2026-11-11 19:43:34.266172 - HTML : https://journals.openedition.org/aad/198
+2026-11-11 19:43:37.400918 - HTML : https://journals.openedition.org/aad/263
+2026-11-11 19:43:40.494481 - HTML : https://journals.openedition.org/aad/251
+2026-11-11 19:43:43.599232 - HTML : https://journals.openedition.org/aad/302
+2026-11-11 19:43:46.699047 - HTML : https://journals.openedition.org/aad/288
+2026-11-11 19:43:49.791635 - HTML : https://journals.openedition.org/aad/413
+2026-11-11 19:43:52.860581 - HTML : https://journals.openedition.org/aad/438
+2026-11-11 19:43:55.950645 - HTML : https://journals.openedition.org/aad/311
+2026-11-11 19:43:59.036974 - HTML : https://journals.openedition.org/aad/482
+2026-11-11 19:44:02.683619 - HTML : https://journals.openedition.org/aad/338
+2026-11-11 19:44:05.779270 - HTML : https://journals.openedition.org/aad/351
+2026-11-11 19:44:08.872539 - HTML : https://journals.openedition.org/aad/200
+2026-11-11 19:44:23.363146 - PDF : https://journals.openedition.org/aad/pdf/184
+2026-11-11 19:44:26.878314 - PDF : https://journals.openedition.org/aad/pdf/193
+2026-11-11 19:44:30.301838 - PDF : https://journals.openedition.org/aad/pdf/198
+2026-11-11 19:44:33.799707 - PDF : https://journals.openedition.org/aad/pdf/263
+2026-11-11 19:44:37.481450 - PDF : https://journals.openedition.org/aad/pdf/251
+2026-11-11 19:44:40.917340 - PDF : https://journals.openedition.org/aad/pdf/302
+2026-11-11 19:44:44.386037 - PDF : https://journals.openedition.org/aad/pdf/288
+2026-11-11 19:44:47.814293 - PDF : https://journals.openedition.org/aad/pdf/413
+2026-11-11 19:44:51.309721 - PDF : https://journals.openedition.org/aad/pdf/438
+2026-11-11 19:44:54.792318 - PDF : https://journals.openedition.org/aad/pdf/311
+2026-11-11 19:44:58.361577 - PDF : https://journals.openedition.org/aad/pdf/482
+2026-11-11 19:45:01.786654 - PDF : https://journals.openedition.org/aad/pdf/338
+2026-11-11 19:45:05.251062 - PDF : https://journals.openedition.org/aad/pdf/351
+2026-11-11 19:45:08.566984 - ERREUR PDF : https://journals.openedition.org/aad/200 - Le PDF téléchargé est vide
