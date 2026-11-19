@@ -11,6 +11,7 @@
 
 # Données temporaires ou intermédiaires reproductibles
 /donnees/intermediaires/
+/chaine/05_analyse/sorties_intermediaires/
 
 # Corpus préparés si leur diffusion n'est pas autorisée
 /donnees/preparees/
