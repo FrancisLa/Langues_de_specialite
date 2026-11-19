@@ -1,0 +1,4 @@
+date_heure;id_analyse;entree;configuration;version_code;sortie;statut;responsable;commentaire
+2026-11-19T17:32:19;A02;AAD_matrice_tfidf.npz;A02_A04_parametres_v01.csv;[à compléter];A02_articles_themes_v01.csv;a_verifier;[nom];
+2026-11-19T17:32:19;A03;A02_articles_themes_v01.csv;A02_A04_parametres_v01.csv;[à compléter];A03_themes_par_auteur_v01.csv;a_verifier;[nom];
+2026-11-19T17:32:19;A04;AAD_matrice_tfidf.npz;A02_A04_parametres_v01.csv;[à compléter];A04_resultats_requete_v01.csv;a_verifier;[nom];
