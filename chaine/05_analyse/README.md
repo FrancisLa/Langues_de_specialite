@@ -87,31 +87,25 @@ sont consignés dans :
 ├── README.md
 ├── plan_analyse.md
 ├── produire_resultats_principaux.py
-├── produire_resultats_principaux.R
+│
 ├── code/
 │   ├── README.md
-│   ├── 01_description_corpus.py
-│   ├── 02_analyse_principale.py
-│   ├── 03_analyse_secondaire.py
-│   └── 04_produire_figures.py
+│   ├── 01_description_corpus.ipynb
+│   ├── 02_analyse_principale.ipynb
+│   └── 03_analyse_secondaire.ipynb
 │
 ├── configurations/
 │   ├── README.md
 │   ├── analyse_principale.yml
-│   ├── analyse_exploratoire.yml
-│   └── parametres_modele.yml
+│   └── analyse_secondaire.yml
 │
-├── sorties_intermediaires/
-│   ├── README.md
-│   ├── description_corpus.csv
-│   ├── resultats_bruts.csv
-│   ├── resultats_annotes.csv
-│   └── journal_execution.csv
-│
-└── notebooks/
+└── sorties_intermediaires/
     ├── README.md
-    └── analyse_exploratoire.ipynb
-```
+    ├── description_corpus.csv
+    ├── resultats_bruts.csv
+    ├── resultats_annotes.csv
+    └── journal_execution.csv
+ ```
 
 Tous les éléments ne sont pas obligatoires.
 
@@ -122,7 +116,6 @@ Tous les éléments ne sont pas obligatoires.
 | `code/` | Scripts, fonctions ou procédures analytiques | Oui |
 | `configurations/` | Paramètres analytiques versionnés | Oui |
 | `sorties_intermediaires/` | Résultats intermédiaires utiles à la traçabilité | Selon le volume |
-| `notebooks/` | Exploration documentée ou démonstration | Oui, si lisible et pertinent |
 | Résultats finaux | Tableaux, figures et extraits retenus | Dans `resultats/` |
 
 > Les notebooks exploratoires peuvent être conservés, mais ils ne doivent
@@ -281,7 +274,7 @@ Les listes de fréquences, concordances, collocations et mots-clés sont
 des techniques classiques de la linguistique de corpus. Elles gagnent à
 être articulées : une fréquence ou une association statistique oriente
 l’attention, mais l’examen des contextes permet de comprendre les usages
-effectifs. [369][378]
+effectifs.
 
 ---
 
@@ -446,7 +439,7 @@ et ne doivent pas être ajoutés à Git.
 
 # 6. Scripts, notebooks et procédures manuelles
 
-## Scripts
+## Scripts et notebooks
 
 Les scripts doivent, lorsque possible :
 
@@ -457,8 +450,6 @@ Les scripts doivent, lorsque possible :
 - éviter les valeurs cachées directement dans le code ;
 - conserver les identifiants de documents et de segments ;
 - permettre de relancer l’analyse sans intervention manuelle non documentée.
-
-## Notebooks
 
 Les notebooks sont utiles pour :
 
@@ -529,22 +520,6 @@ Les statistiques descriptives doivent toujours préciser :
 - la mesure utilisée : nombre brut, proportion, taux, moyenne, médiane,
   score ou autre.
 
-## Exemple de formulation insuffisante
-
-```text
-Les communiqués utilisent plus de formulations causales.
-```
-
-## Formulation améliorée
-
-```text
-Dans le corpus retenu, les formulations classées comme causales directes
-représentent [x %] des [n] phrases analysées dans les communiqués,
-contre [y %] des [m] phrases dans les articles. Cette différence décrit
-le corpus étudié ; elle ne permet pas, à elle seule, d’attribuer une
-intention aux producteurs des documents.
-```
-
 ## Comparaison de sous-corpus
 
 Avant de comparer des sous-corpus, vérifier :
@@ -599,7 +574,7 @@ ou une catégorie correspond réellement au phénomène interprété.
 Les concordances permettent d’articuler l’analyse quantitative à
 l’interprétation qualitative. Les listes de fréquences et les mesures
 d’association ne remplacent pas le retour aux usages attestés dans les
-textes. [369][374][377]
+textes.
 
 ---
 
@@ -630,7 +605,6 @@ Les checklists de reproductibilité en TAL recommandent notamment de
 documenter les détails des données, les séparations entraînement–
 validation–test, les paramètres, les dépendances, les métriques, le
 nombre d’exécutions et les méthodes de sélection des modèles.
-[370][371]
 
 ## LLM et IA générative
 
